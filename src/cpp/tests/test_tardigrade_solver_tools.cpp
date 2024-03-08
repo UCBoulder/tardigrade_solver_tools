@@ -12,6 +12,9 @@
 #define BOOST_TEST_MODULE test_tardigrade_solver_tools
 #include <boost/test/included/unit_test.hpp>
 
+#define DEFAULT_TEST_TOLERANCE 1e-6
+#define CHECK_PER_ELEMENT boost::test_tools::per_element( )
+
 typedef tardigradeSolverTools::errorOut errorOut;
 typedef tardigradeSolverTools::errorNode errorNode;
 typedef tardigradeSolverTools::floatType floatType;
@@ -616,7 +619,7 @@ errorOut lagrangian3( const floatVector &x, const floatMatrix &floatArgs, const 
     return NULL;
 }
 
-BOOST_AUTO_TEST_CASE( testCheckTolerance ){
+BOOST_AUTO_TEST_CASE( testCheckTolerance, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Test the tolerance checking function.
      */
@@ -655,7 +658,7 @@ BOOST_AUTO_TEST_CASE( testCheckTolerance ){
 
 }
 
-BOOST_AUTO_TEST_CASE( testNewtonRaphson ){
+BOOST_AUTO_TEST_CASE( testNewtonRaphson, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Tests of the Newton-Raphson solver
      * 
@@ -684,7 +687,7 @@ BOOST_AUTO_TEST_CASE( testNewtonRaphson ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( Rtmp, { 0, 0 } ) );
+    BOOST_TEST( Rtmp == floatVector( 2, 0 ), CHECK_PER_ELEMENT );
 
     //The second test
     x0 = { 1, 1, 1 };
@@ -702,7 +705,7 @@ BOOST_AUTO_TEST_CASE( testNewtonRaphson ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( Rtmp, { 0, 0, 0 } ) );
+    BOOST_TEST( Rtmp == floatVector( 3, 0 ), CHECK_PER_ELEMENT );
 
     //The third test
     x0 = { 3 };
@@ -716,7 +719,7 @@ BOOST_AUTO_TEST_CASE( testNewtonRaphson ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( x, { 0 } ) );
+    BOOST_TEST( x == floatVector( 1, 0 ), CHECK_PER_ELEMENT );
 
     //The fourth test. Tests the bounded Newton method
     x0 = { 10. };
@@ -738,9 +741,9 @@ BOOST_AUTO_TEST_CASE( testNewtonRaphson ){
     error = tardigradeSolverTools::newtonRaphson( func, x0, x, converged, fatalError, floatOut, intOut, { }, { }, linearSolver, J );
 
     BOOST_CHECK( ! error );
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( x, { 1. } ) );
+    BOOST_TEST( x == floatVector( 1, 1 ), CHECK_PER_ELEMENT );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( J, Jexp ) );
+    BOOST_TEST( tardigradeVectorTools::appendVectors( J ) == tardigradeVectorTools::appendVectors( Jexp ), CHECK_PER_ELEMENT );
 
     //The fifth test: This test makes sure that when a Newton-Raphson iteration fails it
     //correctly returns a failure to converge.
@@ -756,7 +759,7 @@ BOOST_AUTO_TEST_CASE( testNewtonRaphson ){
 
 }
 
-BOOST_AUTO_TEST_CASE( testFiniteDifference ){
+BOOST_AUTO_TEST_CASE( testFiniteDifference, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Test the finite difference jacobian calculator.
      */
@@ -775,7 +778,7 @@ BOOST_AUTO_TEST_CASE( testFiniteDifference ){
     intMatrix intOuts;
     nlFxn1( x0, { }, { }, Rtmp, result, floatOuts, intOuts );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( J, result ) );
+    BOOST_TEST( tardigradeVectorTools::appendVectors( J ) == tardigradeVectorTools::appendVectors( result ), CHECK_PER_ELEMENT );
 
     //The second test
     x0 = { 1, 1, 1 };
@@ -785,11 +788,11 @@ BOOST_AUTO_TEST_CASE( testFiniteDifference ){
     tardigradeSolverTools::finiteDifference( func, x0, J, { }, { } );
     nlFxn2( x0, { }, { }, Rtmp, result, floatOuts, intOuts );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( J, result ) );
+    BOOST_TEST( tardigradeVectorTools::appendVectors( J ) == tardigradeVectorTools::appendVectors( result ), CHECK_PER_ELEMENT );
 
 }
 
-BOOST_AUTO_TEST_CASE( testCheckJacobian ){
+BOOST_AUTO_TEST_CASE( testCheckJacobian, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Test the jacobian checking utility.
      */
@@ -828,7 +831,7 @@ BOOST_AUTO_TEST_CASE( testCheckJacobian ){
 
 }
 
-BOOST_AUTO_TEST_CASE( testCheckLSCriteria ){
+BOOST_AUTO_TEST_CASE( testCheckLSCriteria, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Test the line search criteria
      */
@@ -849,7 +852,7 @@ BOOST_AUTO_TEST_CASE( testCheckLSCriteria ){
 
 }
 
-BOOST_AUTO_TEST_CASE( testHomotopySolver ){
+BOOST_AUTO_TEST_CASE( testHomotopySolver, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Test the Homotopy solver.
      */
@@ -876,7 +879,7 @@ BOOST_AUTO_TEST_CASE( testHomotopySolver ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( Rtmp, { 0, 0 } ) );
+    BOOST_TEST( Rtmp == floatVector( 2, 0 ), CHECK_PER_ELEMENT );
 
     //The second test
     x0 = { 1, 1, 1 };
@@ -894,7 +897,7 @@ BOOST_AUTO_TEST_CASE( testHomotopySolver ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( Rtmp, { 0, 0, 0 } ) );
+    BOOST_TEST( Rtmp == floatVector( 3, 0 ), CHECK_PER_ELEMENT );
 
     //The third test
     x0 = { 3 };
@@ -909,7 +912,7 @@ BOOST_AUTO_TEST_CASE( testHomotopySolver ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( x, { 0 } ) );
+    BOOST_TEST( x == floatVector( 1, 0 ), CHECK_PER_ELEMENT );
 
     //The fourth test
     x0 = { 3 };
@@ -923,7 +926,7 @@ BOOST_AUTO_TEST_CASE( testHomotopySolver ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( x, { 0 } ) );
+    BOOST_TEST( x == floatVector( 1, 0 ), CHECK_PER_ELEMENT );
 
     //The fifth test ( hard bounds )
     x0 = { 10 };
@@ -947,14 +950,14 @@ BOOST_AUTO_TEST_CASE( testHomotopySolver ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( x, { 1 } ) );
+    BOOST_TEST( x == floatVector( 1, 1 ), CHECK_PER_ELEMENT );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( J, Jexp ) );
+    BOOST_TEST( tardigradeVectorTools::appendVectors( J ) == tardigradeVectorTools::appendVectors( Jexp ), CHECK_PER_ELEMENT );
 
     
 }
 
-BOOST_AUTO_TEST_CASE( test_aFxn ){
+BOOST_AUTO_TEST_CASE( test_aFxn, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Test the computation of the "\f$a\f$" parameter in the Barrier function.
      */
@@ -970,7 +973,7 @@ BOOST_AUTO_TEST_CASE( test_aFxn ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( result, answer ) );
+    BOOST_TEST( result == answer );
 
     floatType dadT;
 
@@ -978,7 +981,7 @@ BOOST_AUTO_TEST_CASE( test_aFxn ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( result, answer ) );
+    BOOST_TEST( result == answer );
 
     floatType eps = 1e-6;
     floatType delta = eps * pseudoT + eps;
@@ -993,11 +996,11 @@ BOOST_AUTO_TEST_CASE( test_aFxn ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( ( aP - aM ) / ( 2 * delta ), dadT ) );
+    BOOST_TEST( ( aP - aM ) / ( 2 * delta ) == dadT );
 
 }
 
-BOOST_AUTO_TEST_CASE( test_computeBarrierFunction ){
+BOOST_AUTO_TEST_CASE( test_computeBarrierFunction, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Test the computation of the boundary function
      */
@@ -1016,13 +1019,13 @@ BOOST_AUTO_TEST_CASE( test_computeBarrierFunction ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( result, negativeSignAnswer ) );
+    BOOST_TEST( result == negativeSignAnswer );
 
     error = tardigradeSolverTools::computeBarrierFunction( x, pseudoT, logAmax, b, true, result );
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( result, positiveSignAnswer ) );
+    BOOST_TEST( result == positiveSignAnswer );
 
     //Test the Jacobians
     floatType dbdx, dbdt;
@@ -1032,7 +1035,7 @@ BOOST_AUTO_TEST_CASE( test_computeBarrierFunction ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( result, negativeSignAnswer ) );
+    BOOST_TEST( result == negativeSignAnswer );
 
     floatType eps = 1e-6;
 
@@ -1049,7 +1052,7 @@ BOOST_AUTO_TEST_CASE( test_computeBarrierFunction ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( ( bP - bM ) / ( 2 * dx ), dbdx ) );
+    BOOST_TEST( ( bP - bM ) / ( 2 * dx ) == dbdx );
 
     error = tardigradeSolverTools::computeBarrierFunction( x, pseudoT + dt, logAmax, b, false, bP );
 
@@ -1059,14 +1062,14 @@ BOOST_AUTO_TEST_CASE( test_computeBarrierFunction ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( ( bP - bM ) / ( 2 * dt ), dbdt ) );
+    BOOST_TEST( ( bP - bM ) / ( 2 * dt ) == dbdt );
 
     //Test the Jacobians when the sign is positive
     error = tardigradeSolverTools::computeBarrierFunction( x, pseudoT, logAmax, b, true, result, dbdx, dbdt );
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( result, positiveSignAnswer ) );
+    BOOST_TEST( result == positiveSignAnswer );
 
     error = tardigradeSolverTools::computeBarrierFunction( x + dx, pseudoT, logAmax, b, true, bP );
 
@@ -1076,7 +1079,7 @@ BOOST_AUTO_TEST_CASE( test_computeBarrierFunction ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( ( bP - bM ) / ( 2 * dx ), dbdx ) );
+    BOOST_TEST( ( bP - bM ) / ( 2 * dx ) == dbdx );
 
     error = tardigradeSolverTools::computeBarrierFunction( x, pseudoT + dt, logAmax, b, true, bP );
 
@@ -1086,11 +1089,11 @@ BOOST_AUTO_TEST_CASE( test_computeBarrierFunction ){
 
     BOOST_CHECK( ! error );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( ( bP - bM ) / ( 2 * dt ), dbdt ) );
+    BOOST_TEST( ( bP - bM ) / ( 2 * dt ) == dbdt );
 
 }
 
-BOOST_AUTO_TEST_CASE( test_computeBarrierHomotopyResidual ){
+BOOST_AUTO_TEST_CASE( test_computeBarrierHomotopyResidual, * boost::unit_test::tolerance( 1e-5 ) ){
     /*!
      * Test the computation of the barrier homotopy residual
      */
@@ -1155,24 +1158,24 @@ BOOST_AUTO_TEST_CASE( test_computeBarrierHomotopyResidual ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( residualAnswer, residualResult ) );
+    BOOST_TEST( residualAnswer == residualResult, CHECK_PER_ELEMENT );
 
     //Check that the non-homotopy outputs are as expected.
-    BOOST_CHECK( floatOuts.size( ) == 4 );
+    BOOST_TEST( floatOuts.size( ) == 4 );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( floatOuts[ 1 ], floatOutsDefault[ 0 ] + 0.1 ) );
+    BOOST_TEST( floatOuts[ 1 ] == floatOutsDefault[ 0 ] + 0.1 );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( floatOuts[ 2 ], floatOutsDefault[ 1 ] ) );
+    BOOST_TEST( floatOuts[ 2 ] == floatOutsDefault[ 1 ] );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( floatOuts[ 3 ], floatOutsDefault[ 0 ] ) );
+    BOOST_TEST( floatOuts[ 3 ] == floatOutsDefault[ 0 ] );
 
-    BOOST_CHECK( intOuts.size( ) == 3 );
+    BOOST_TEST( intOuts.size( ) == 3 );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( intOuts[ 0 ], intOutsDefault[ 0 ] - 2 ) );
+    BOOST_TEST( intOuts[ 0 ] == intOutsDefault[ 0 ] - 2 );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( intOuts[ 1 ], intOutsDefault[ 0 ] ) );
+    BOOST_TEST( intOuts[ 1 ] == intOutsDefault[ 0 ] );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( intOuts[ 2 ], intOutsDefault[ 1 ] ) );
+    BOOST_TEST( intOuts[ 2 ] == intOutsDefault[ 1 ] );
 
     //Test the Jacobians
     floatType eps = 1e-6;
@@ -1201,7 +1204,7 @@ BOOST_AUTO_TEST_CASE( test_computeBarrierHomotopyResidual ){
 
     floatVector gradCol = ( rP - rM ) / ( 2 * dx[ 0 ] );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( gradCol, jacobian[ 0 ] ) );
+    BOOST_TEST( gradCol == jacobian[ 0 ], CHECK_PER_ELEMENT );
 
     //test drdt
     eps = 1e-7;
@@ -1231,11 +1234,11 @@ BOOST_AUTO_TEST_CASE( test_computeBarrierHomotopyResidual ){
 
     gradCol = ( rP - rM ) / ( 2 * dt );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( gradCol, floatOuts[ 0 ], 1e-5 ) );
+    BOOST_TEST( gradCol == floatOuts[ 0 ], CHECK_PER_ELEMENT );
 
 }
 
-BOOST_AUTO_TEST_CASE( test_computeBarrierHomotopyResidual2 ){
+BOOST_AUTO_TEST_CASE( test_computeBarrierHomotopyResidual2, * boost::unit_test::tolerance( 1e-5 ) ){
     /*!
      * Test for the computation of the barrier homotopy residual.
      */
@@ -1270,7 +1273,7 @@ BOOST_AUTO_TEST_CASE( test_computeBarrierHomotopyResidual2 ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( residualResult, residualAnswer ) );
+    BOOST_TEST( residualResult == residualAnswer, CHECK_PER_ELEMENT );
 
     //Tests of the Jacobians
 
@@ -1295,7 +1298,7 @@ BOOST_AUTO_TEST_CASE( test_computeBarrierHomotopyResidual2 ){
         floatVector gradCol = ( rP - rM ) / ( 2 * delta[ i ] );
 
         for ( unsigned int j = 0; j < gradCol.size( ); j++ ){
-            BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( gradCol[ j ], jacobian[ j ][ i ] ) );
+            BOOST_TEST( gradCol[ j ] == jacobian[ j ][ i ] );
         }
     }
 
@@ -1320,11 +1323,11 @@ BOOST_AUTO_TEST_CASE( test_computeBarrierHomotopyResidual2 ){
 
     floatVector gradCol = ( rP - rM ) / ( 2 * dt );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( gradCol, floatOuts[ 0 ] ) );
+    BOOST_TEST( gradCol == floatOuts[ 0 ], CHECK_PER_ELEMENT );
 
 }
 
-BOOST_AUTO_TEST_CASE( test_barrierHomotopySolver ){
+BOOST_AUTO_TEST_CASE( test_barrierHomotopySolver, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Test the barrier Homotopy solver. This solver enables the addition of
      * bounds to a non-linear solve which can help prevent solutions from being
@@ -1393,7 +1396,7 @@ BOOST_AUTO_TEST_CASE( test_barrierHomotopySolver ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( answer, result ) );
+    BOOST_TEST( answer == result, CHECK_PER_ELEMENT );
 
     floatOuts = floatOutsDefault;
     intOuts = intOutsDefault;
@@ -1408,7 +1411,7 @@ BOOST_AUTO_TEST_CASE( test_barrierHomotopySolver ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( answer, result ) );
+    BOOST_TEST( answer == result, CHECK_PER_ELEMENT );
 
     floatMatrix jacobianResult;
 
@@ -1419,7 +1422,7 @@ BOOST_AUTO_TEST_CASE( test_barrierHomotopySolver ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( jacobian, jacobianResult ) );
+    BOOST_TEST( tardigradeVectorTools::appendVectors( jacobian ) == tardigradeVectorTools::appendVectors( jacobianResult ), CHECK_PER_ELEMENT );
 
     x0 = { 0. };
     implicitRefine = true;
@@ -1435,7 +1438,7 @@ BOOST_AUTO_TEST_CASE( test_barrierHomotopySolver ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( answer, result ) );
+    BOOST_TEST( answer == result, CHECK_PER_ELEMENT );
 
     floatOuts = floatOutsDefault;
     intOuts = intOutsDefault;
@@ -1448,7 +1451,7 @@ BOOST_AUTO_TEST_CASE( test_barrierHomotopySolver ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( answer, result ) );
+    BOOST_TEST( answer == result, CHECK_PER_ELEMENT );
 
     floatOuts = floatOutsDefault;
     intOuts = intOutsDefault;
@@ -1457,11 +1460,11 @@ BOOST_AUTO_TEST_CASE( test_barrierHomotopySolver ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( jacobian, jacobianResult ) );
+    BOOST_TEST( tardigradeVectorTools::appendVectors( jacobian ) == tardigradeVectorTools::appendVectors( jacobianResult ), CHECK_PER_ELEMENT );
 
 }
 
-BOOST_AUTO_TEST_CASE( test_applyBoundaryLimitation ){
+BOOST_AUTO_TEST_CASE( test_applyBoundaryLimitation, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Test of the application of the boundary conditions.
      *
@@ -1485,7 +1488,7 @@ BOOST_AUTO_TEST_CASE( test_applyBoundaryLimitation ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( x0 + dx, xAnswer1 ) );
+    BOOST_TEST( x0 + dx == xAnswer1, CHECK_PER_ELEMENT );
 
     dx = dxDefault;
     x0[ 3 ] = -0.9;
@@ -1495,18 +1498,18 @@ BOOST_AUTO_TEST_CASE( test_applyBoundaryLimitation ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( x0 + dx, xAnswer2 ) );
+    BOOST_TEST( x0 + dx == xAnswer2, CHECK_PER_ELEMENT );
 
     dx = dxDefault;
     error = tardigradeSolverTools::applyBoundaryLimitation( x0, variableIndices, barrierSigns, barrierValues, dx, 1e-9, 1e-9, true );
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( x0 + dx, xAnswer3 ) );
+    BOOST_TEST( x0 + dx == xAnswer3, CHECK_PER_ELEMENT );
 
 }
 
-BOOST_AUTO_TEST_CASE( test_BFGS ){
+BOOST_AUTO_TEST_CASE( test_BFGS, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Test of the BFGS optimization algorithm.
      */
@@ -1530,15 +1533,15 @@ BOOST_AUTO_TEST_CASE( test_BFGS ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( x, xAnswer ) );
+    BOOST_TEST( x == xAnswer, CHECK_PER_ELEMENT );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( floatOuts, floatOutsAnswer ) );
+    BOOST_TEST( tardigradeVectorTools::appendVectors( floatOuts ) == tardigradeVectorTools::appendVectors( floatOutsAnswer ), CHECK_PER_ELEMENT );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( intOuts, intOutsAnswer ) );
+    BOOST_TEST( tardigradeVectorTools::appendVectors( intOuts ) == tardigradeVectorTools::appendVectors( intOutsAnswer ), CHECK_PER_ELEMENT );
 
 }
 
-BOOST_AUTO_TEST_CASE( test_BFGS2 ){
+BOOST_AUTO_TEST_CASE( test_BFGS2, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Test of the BFGS optimization algorithm.
      */
@@ -1567,15 +1570,17 @@ BOOST_AUTO_TEST_CASE( test_BFGS2 ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( { x[ 0 ], x[ 1 ] }, xAnswer ) );
+    floatVector result = { x[ 0 ], x[ 1 ] };
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( floatOuts, floatOutsAnswer ) );
+    BOOST_TEST( result == xAnswer, CHECK_PER_ELEMENT );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( intOuts, intOutsAnswer ) );
+    BOOST_TEST( tardigradeVectorTools::appendVectors( floatOuts ) == tardigradeVectorTools::appendVectors( floatOutsAnswer ), CHECK_PER_ELEMENT );
+
+    BOOST_TEST( tardigradeVectorTools::appendVectors( intOuts ) == tardigradeVectorTools::appendVectors( intOutsAnswer ), CHECK_PER_ELEMENT );
 
 }
 
-BOOST_AUTO_TEST_CASE( test_homotopyBFGS ){
+BOOST_AUTO_TEST_CASE( test_homotopyBFGS, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Test of the homotopy BFGS optimization algorithm.
      */
@@ -1601,15 +1606,15 @@ BOOST_AUTO_TEST_CASE( test_homotopyBFGS ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( x, xAnswer ) );
+    BOOST_TEST( x == xAnswer, CHECK_PER_ELEMENT );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( floatOuts, floatOutsAnswer ) );
+    BOOST_TEST( tardigradeVectorTools::appendVectors( floatOuts ) == tardigradeVectorTools::appendVectors( floatOutsAnswer ), CHECK_PER_ELEMENT );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( intOuts, intOutsAnswer ) );
+    BOOST_TEST( tardigradeVectorTools::appendVectors( intOuts ) == tardigradeVectorTools::appendVectors( intOutsAnswer ), CHECK_PER_ELEMENT );
 
 }
 
-BOOST_AUTO_TEST_CASE( test_homotopyBFGS2 ){
+BOOST_AUTO_TEST_CASE( test_homotopyBFGS2, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
      * Test of the BFGS optimization algorithm.
      */
@@ -1638,10 +1643,12 @@ BOOST_AUTO_TEST_CASE( test_homotopyBFGS2 ){
 
     BOOST_CHECK( ! error  );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( { x[ 0 ], x[ 1 ] }, xAnswer ) );
+    floatVector result = { x[ 0 ], x[ 1 ] };
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( floatOuts, floatOutsAnswer ) );
+    BOOST_TEST( result == xAnswer, CHECK_PER_ELEMENT );
 
-    BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( intOuts, intOutsAnswer ) );
+    BOOST_TEST( tardigradeVectorTools::appendVectors( floatOuts ) == tardigradeVectorTools::appendVectors( floatOutsAnswer ), CHECK_PER_ELEMENT );
+
+    BOOST_TEST( tardigradeVectorTools::appendVectors( intOuts ) == tardigradeVectorTools::appendVectors( intOutsAnswer ), CHECK_PER_ELEMENT );
 
 }
