@@ -6,13 +6,27 @@ Changelog
 #########
 
 ******************
-0.6.4 (unreleased)
+0.6.5 (unreleased)
+******************
+
+Internal Changes
+================
+- Updated the README (:pull:`8`). By `Nathan Miller`_.
+
+******************
+0.6.4 (2023-12-23)
 ******************
 
 Internal Changes
 ================
 - Changed the fuzzyEquals to BOOST_TEST (:pull:`3`). By `Nathan Miller`_.
 - Allow for the version number to be set when using FetchContent (:pull:`4`). By `Nathan Miller`_.
+- Enabled O3 optimization by default (:pull:`5`). By `Nathan Miller`_.
+- Enabled linting of the cmake and source files (:pull:`6`). By `Nathan Miller`_.
+
+Release
+=======
+- Released version 0.6.4 (:pull:`7`). By `Nathan Miller`_.
 
 ******************
 0.6.3 (2023-09-29)
