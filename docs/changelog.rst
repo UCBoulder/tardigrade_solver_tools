@@ -9,6 +9,11 @@ Changelog
 0.6.4 (unreleased)
 ******************
 
+Internal Changes
+================
+- Changed the fuzzyEquals to BOOST_TEST (:pull:`3`). By `Nathan Miller`_.
+- Allow for the version number to be set when using FetchContent (:pull:`4`). By `Nathan Miller`_.
+
 ******************
 0.6.3 (2023-09-29)
 ******************
