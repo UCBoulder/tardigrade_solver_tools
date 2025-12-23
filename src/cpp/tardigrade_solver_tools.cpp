@@ -297,7 +297,17 @@ namespace tardigradeSolverTools{
                 }
 
                 //Perform the line-search check
-                checkLSCriteria( R, Rp, lsCheck, alpha );
+                error = checkLSCriteria( R, Rp, lsCheck, alpha );
+
+                if (error){
+
+                    errorOut result = new errorNode( __func__, "Error when checking the line search criteria");
+    
+                    result->addNext( error );
+    
+                    return result;
+
+                }
 
                 //Increment the number of line-search iterations
                 nLSIterations++;
@@ -1590,7 +1600,9 @@ namespace tardigradeSolverTools{
                 error = checkTolerance( lagrangianGradient_kp1, tol, converged );
 
                 if ( error ){
-                    return new errorNode( "BFGS", "Error in the tolerence check at end of iteration" );
+                    errorOut result = new errorNode( "BFGS", "Error in the tolerence check at end of iteration" );
+                    result->addNext( error );
+                    return result;
                 }
             }
         }

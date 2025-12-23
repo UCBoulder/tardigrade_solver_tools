@@ -188,7 +188,7 @@ namespace tardigradeSolverTools{
 
     errorOut finiteDifference( stdFncNLF fxn,
                             const floatVector &x0,
-                            floatMatrix &J, const floatMatrix &floatArgs, const intMatrix &intArgs, const floatType eps=1e-6);
+                            floatMatrix &grad, const floatMatrix &floatArgs, const intMatrix &intArgs, const floatType eps=1e-6);
 
     errorOut checkJacobian( stdFncNLFJ residual,
                             const floatVector &x0,

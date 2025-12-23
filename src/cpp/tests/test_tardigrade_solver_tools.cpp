@@ -77,10 +77,6 @@ errorOut nlFxn1( const floatVector &x, const floatMatrix &floatArgs, const intMa
      * \param &intOuts: Additional integer outputs.
      */
 
-    if ( x.size( ) != 2 ){
-        return new errorNode( "nlFnx1", "x must have a size of 2" );
-    }
-
     floatType x0 = -1;
     floatType y0 = 5.6;
 
@@ -135,10 +131,6 @@ errorOut nlFxn2( const floatVector &x, const floatMatrix &floatArgs, const intMa
      * \param &floatOuts: Additional floating point outputs.
      * \param &intOuts: Additional integer outputs.
      */
-
-    if ( x.size( ) != 3 ){
-        return new errorNode( "nlFxn2", "x must have a size of 3" );
-    }
 
     residual = { ( x[ 0 ] - 1 ) * ( x[ 0 ] - 7 ) * x[ 1 ], ( x[ 1 ] - 1 ) * ( x[ 0 ] - 3 ) * x[ 2 ], x[ 0 ] * x[ 1 ] * x[ 2 ] };
     jacobian = { { ( x[ 0 ] - 7 ) * x[ 1 ] + ( x[ 0 ] - 1 ) * x[ 1 ], ( x[ 0 ] - 1 ) * ( x[ 0 ] - 7 ), 0 },
@@ -755,6 +747,8 @@ BOOST_AUTO_TEST_CASE( testNewtonRaphson, * boost::unit_test::tolerance( DEFAULT_
 
     error = tardigradeSolverTools::newtonRaphson( func, x0, x, converged, fatalError, floatOut, intOut, { }, { }, 5 );
 
+    BOOST_CHECK( error );
+
     BOOST_CHECK( ! converged );
 
 }
@@ -770,13 +764,17 @@ BOOST_AUTO_TEST_CASE( testFiniteDifference, * boost::unit_test::tolerance( DEFAU
 
     tardigradeSolverTools::stdFncNLF func;
     func = static_cast<tardigradeSolverTools::NonLinearFunction>( nlFxn1 );
-    tardigradeSolverTools::finiteDifference( func, x0, J, { }, { } );
+    errorOut error1 = tardigradeSolverTools::finiteDifference( func, x0, J, { }, { } );
+
+    BOOST_TEST( !error1 );
 
     floatVector Rtmp;
     floatMatrix result;
     floatMatrix floatOuts;
     intMatrix intOuts;
-    nlFxn1( x0, { }, { }, Rtmp, result, floatOuts, intOuts );
+    errorOut error2 = nlFxn1( x0, { }, { }, Rtmp, result, floatOuts, intOuts );
+
+    BOOST_TEST( !error2 );
 
     BOOST_TEST( tardigradeVectorTools::appendVectors( J ) == tardigradeVectorTools::appendVectors( result ), CHECK_PER_ELEMENT );
 
@@ -785,8 +783,13 @@ BOOST_AUTO_TEST_CASE( testFiniteDifference, * boost::unit_test::tolerance( DEFAU
     floatOuts.clear( );
     intOuts.clear( );
     func = static_cast<tardigradeSolverTools::NonLinearFunction>( nlFxn2 );
-    tardigradeSolverTools::finiteDifference( func, x0, J, { }, { } );
-    nlFxn2( x0, { }, { }, Rtmp, result, floatOuts, intOuts );
+    errorOut error3 = tardigradeSolverTools::finiteDifference( func, x0, J, { }, { } );
+
+    BOOST_TEST( !error3 );
+
+    errorOut error4 = nlFxn2( x0, { }, { }, Rtmp, result, floatOuts, intOuts );
+
+    BOOST_TEST( !error4 );
 
     BOOST_TEST( tardigradeVectorTools::appendVectors( J ) == tardigradeVectorTools::appendVectors( result ), CHECK_PER_ELEMENT );
 
