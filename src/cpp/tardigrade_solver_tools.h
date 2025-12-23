@@ -60,8 +60,8 @@ namespace tardigradeSolverTools{
      * \param &floatOuts: Additional floating point values to return.
      * \param &intOuts: Additional integer values to return.
      */
-    typedef errorOut(*NonLinearFunctionWithJacobian)(const floatVector&, const floatMatrix&, const intMatrix&, floatVector&, floatMatrix&,
-                                                     floatMatrix &, intMatrix &);
+    typedef errorOut(*NonLinearFunctionWithJacobian)(const floatVector &x, const floatMatrix &floatArgs, const intMatrix &intArgs, floatVector &residual, floatMatrix &jacobian,
+                                                     floatMatrix &floatOuts, intMatrix &intOuts);
     /**
      * A residual function including the Jacobian
      * 
@@ -80,7 +80,7 @@ namespace tardigradeSolverTools{
      * 
      * \param &x: A vector of the variable to be solved.
      * \param &floatArgs: Additional floating point arguments to residual
-     * \param intMatrix &intArgs: Additional integer arguments to the residual
+     * \param &intArgs: Additional integer arguments to the residual
      * \param &value: The value of the Lagrangian.
      * \param &gradient: The gradient of the Lagrangian function.
      * \param &floatOuts: Additional floating point values to return.
