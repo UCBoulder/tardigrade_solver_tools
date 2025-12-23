@@ -1,23 +1,23 @@
 /**
-  *****************************************************************************
-  * \file tardigrade_solver_tools.cpp
-  *****************************************************************************
-  * The solver tools library. Incorporates a collection of non-linear solver
-  * tools built on top of Eigen. These tools are intended to be general enough
-  * to solve any small-ish nonlinear problem that can be solved using a Newton
-  * Raphson approach.
-  *****************************************************************************
-  */
+ *****************************************************************************
+ * \file tardigrade_solver_tools.cpp
+ *****************************************************************************
+ * The solver tools library. Incorporates a collection of non-linear solver
+ * tools built on top of Eigen. These tools are intended to be general enough
+ * to solve any small-ish nonlinear problem that can be solved using a Newton
+ * Raphson approach.
+ *****************************************************************************
+ */
 
-#include<tardigrade_solver_tools.h>
+#include <tardigrade_solver_tools.h>
 
-namespace tardigradeSolverTools{
+namespace tardigradeSolverTools {
 
-    errorOut newtonRaphson( stdFncNLFJ residual, const floatVector &x0,
-                            floatVector &x, bool &convergeFlag, bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
-                            const floatMatrix &floatArgs, const intMatrix &intArgs,
-                            const unsigned int maxNLIterations, const floatType tolr, const floatType tola,
-                            const floatType alpha, const unsigned int maxLSIterations, const bool resetOuts ){
+    errorOut newtonRaphson(stdFncNLFJ residual, const floatVector &x0, floatVector &x, bool &convergeFlag,
+                           bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
+                           const floatMatrix &floatArgs, const intMatrix &intArgs, const unsigned int maxNLIterations,
+                           const floatType tolr, const floatType tola, const floatType alpha,
+                           const unsigned int maxLSIterations, const bool resetOuts) {
         /*!
          * The main Newton-Raphson non-linear solver routine. An implementation
          * of a typical Newton-Raphson solver which can take an arbitrary
@@ -42,17 +42,18 @@ namespace tardigradeSolverTools{
          *     prior to each iteration.
          */
 
-        solverType linearSolver;
+        solverType  linearSolver;
         floatMatrix J;
-        return newtonRaphson( residual, x0, x, convergeFlag, fatalErrorFlag, floatOuts, intOuts, floatArgs, intArgs, linearSolver, J,
-                              maxNLIterations, tolr, tola, alpha, maxLSIterations, resetOuts );
+        return newtonRaphson(residual, x0, x, convergeFlag, fatalErrorFlag, floatOuts, intOuts, floatArgs, intArgs,
+                             linearSolver, J, maxNLIterations, tolr, tola, alpha, maxLSIterations, resetOuts);
     }
 
-    errorOut newtonRaphson( stdFncNLFJ residual, const floatVector &x0,
-                            floatVector &x, bool &convergeFlag, bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
-                            const floatMatrix &floatArgs, const intMatrix &intArgs, solverType &linearSolver, floatMatrix &J,
-                            const unsigned int maxNLIterations, const floatType tolr, const floatType tola,
-                            const floatType alpha, const unsigned int maxLSIterations, const bool resetOuts ){
+    errorOut newtonRaphson(stdFncNLFJ residual, const floatVector &x0, floatVector &x, bool &convergeFlag,
+                           bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
+                           const floatMatrix &floatArgs, const intMatrix &intArgs, solverType &linearSolver,
+                           floatMatrix &J, const unsigned int maxNLIterations, const floatType tolr,
+                           const floatType tola, const floatType alpha, const unsigned int maxLSIterations,
+                           const bool resetOuts) {
         /*!
          * The main Newton-Raphson non-linear solver routine. An implementation
          * of a typical Newton-Raphson solver which can take an arbitrary
@@ -69,7 +70,7 @@ namespace tardigradeSolverTools{
          * \param &floatArgs: The additional floating-point arguments.
          * \param &intArgs: The additional integer arguments.
          * \param &linearSolver: The linear solver used in the solve. This object
-         *     contains the decomposed Jacobian matrix which can be very useful in 
+         *     contains the decomposed Jacobian matrix which can be very useful in
          *     total Jacobian calculations
          * \param &J: The Jacobian matrix. Useful in calculating total Jacobians.
          * \param maxNLIterations: The maximum number of non-linear iterations.
@@ -81,22 +82,22 @@ namespace tardigradeSolverTools{
          *     prior to each iteration.
          */
 
-        intVector boundVariableIndices(0);
-        intVector boundSigns(0);
+        intVector   boundVariableIndices(0);
+        intVector   boundSigns(0);
         floatVector boundValues(0);
-        bool boundMode = false;
-        return newtonRaphson( residual, x0, x, convergeFlag, fatalErrorFlag, floatOuts, intOuts, floatArgs, intArgs, linearSolver, J,
-                              boundVariableIndices, boundSigns, boundValues, boundMode,
-                              maxNLIterations, tolr, tola, alpha, maxLSIterations, resetOuts );
+        bool        boundMode = false;
+        return newtonRaphson(residual, x0, x, convergeFlag, fatalErrorFlag, floatOuts, intOuts, floatArgs, intArgs,
+                             linearSolver, J, boundVariableIndices, boundSigns, boundValues, boundMode, maxNLIterations,
+                             tolr, tola, alpha, maxLSIterations, resetOuts);
     }
 
-    errorOut newtonRaphson( stdFncNLFJ residual, const floatVector &x0,
-                            floatVector &x, bool &convergeFlag, bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
-                            const floatMatrix &floatArgs, const intMatrix &intArgs, solverType &linearSolver, floatMatrix &J,
-                            const intVector &boundVariableIndices, const intVector &boundSigns, const floatVector &boundValues,
-                            const bool boundMode,
-                            const unsigned int maxNLIterations, const floatType tolr, const floatType tola,
-                            const floatType alpha, const unsigned int maxLSIterations, const bool resetOuts){
+    errorOut newtonRaphson(stdFncNLFJ residual, const floatVector &x0, floatVector &x, bool &convergeFlag,
+                           bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
+                           const floatMatrix &floatArgs, const intMatrix &intArgs, solverType &linearSolver,
+                           floatMatrix &J, const intVector &boundVariableIndices, const intVector &boundSigns,
+                           const floatVector &boundValues, const bool boundMode, const unsigned int maxNLIterations,
+                           const floatType tolr, const floatType tola, const floatType alpha,
+                           const unsigned int maxLSIterations, const bool resetOuts) {
         /*!
          * The main Newton-Raphson non-linear solver routine. An implementation
          * of a typical Newton-Raphson solver which can take an arbitrary
@@ -113,7 +114,7 @@ namespace tardigradeSolverTools{
          * \param &floatArgs: The additional floating-point arguments.
          * \param &intArgs: The additional integer arguments.
          * \param &linearSolver: The linear solver used in the solve. This object
-         *     contains the decomposed Jacobian matrix which can be very useful in 
+         *     contains the decomposed Jacobian matrix which can be very useful in
          *     total Jacobian calculations
          * \param &J: The Jacobian matrix. Useful in calculating total Jacobians
          * \param &boundVariableIndices: The indices of variables that have hard bounds
@@ -131,228 +132,222 @@ namespace tardigradeSolverTools{
          *     prior to each iteration
          */
 
-        //Compute the initial residual and jacobian
+        // Compute the initial residual and jacobian
         floatVector dx = floatVector(x0.size(), 0);
         floatVector ddx;
         floatVector R, Rp;
 
-        //Make copies of the initial float out values
+        // Make copies of the initial float out values
         floatMatrix oldFloatOuts = floatOuts;
         intMatrix   oldIntOuts   = intOuts;
 
         errorOut error = residual(x0 + dx, floatArgs, intArgs, R, J, floatOuts, intOuts);
 
-        if ( error ){
-            if ( ( R.size( ) == 101 ) && ( J.size( ) == 212 ) ){ // This is supposed to detect a failure in convergence of a sub non-linear solve. I don't like this approach and will be setting up an issue to change it
-                convergeFlag = false;
-                fatalErrorFlag = false;
-                errorOut result = new errorNode( "newtonRaphson", "Convergence error in intial residual" );
-                result->addNext( error );
+        if (error) {
+            if ((R.size() == 101) &&
+                (J.size() == 212)) {  // This is supposed to detect a failure in convergence of a sub non-linear solve.
+                                      // I don't like this approach and will be setting up an issue to change it
+                convergeFlag    = false;
+                fatalErrorFlag  = false;
+                errorOut result = new errorNode("newtonRaphson", "Convergence error in intial residual");
+                result->addNext(error);
                 return result;
-            }
-            else {
-                fatalErrorFlag = true;
+            } else {
+                fatalErrorFlag  = true;
                 errorOut result = new errorNode("newtonRaphson", "Error in computation of initial residual");
                 result->addNext(error);
                 return result;
             }
         }
 
-        if (R.size() != x0.size()){
+        if (R.size() != x0.size()) {
             fatalErrorFlag = true;
-            return new errorNode("newtonRaphson", "The residual and x0 don't have the same lengths. The problem is ill-defined.");
+            return new errorNode("newtonRaphson",
+                                 "The residual and x0 don't have the same lengths. The problem is ill-defined.");
         }
 
-        if ( resetOuts ){
+        if (resetOuts) {
             floatOuts = oldFloatOuts;
-            intOuts = oldIntOuts;
+            intOuts   = oldIntOuts;
         }
 
-        //Set the tolerance for each value individually
-        floatVector tol = floatVector( R.size( ), 0 );
-        for ( unsigned int i = 0; i < R.size( ); i++ ){ tol[ i ] = tolr * fabs( R[ i ] ) + tola; }
+        // Set the tolerance for each value individually
+        floatVector tol = floatVector(R.size(), 0);
+        for (unsigned int i = 0; i < R.size(); i++) {
+            tol[i] = tolr * fabs(R[i]) + tola;
+        }
 
-        //Copy R to Rp
+        // Copy R to Rp
         Rp = R;
 
-        //Initialize variables required for the iteration loop
+        // Initialize variables required for the iteration loop
         unsigned int nNLIterations = 0;
         unsigned int nLSIterations = 0;
-        float lambda = 1;
-        bool converged, lsCheck;
-        error = checkTolerance( R, tol, converged );
+        float        lambda        = 1;
+        bool         converged, lsCheck;
+        error = checkTolerance(R, tol, converged);
 
-        if (error){
+        if (error) {
+            errorOut result = new errorNode(__func__, "Error when checking the tolerance");
 
-            errorOut result = new errorNode( __func__, "Error when checking the tolerance");
-
-            result->addNext( error );
+            result->addNext(error);
 
             return result;
-
         }
 
         unsigned int rank;
-        convergeFlag = false;
+        convergeFlag   = false;
         fatalErrorFlag = false;
 
-        //Begin the iteration loop
-        while ( ( !converged ) && ( nNLIterations<maxNLIterations ) ){
+        // Begin the iteration loop
+        while ((!converged) && (nNLIterations < maxNLIterations)) {
+            // Perform the linear solve
+            ddx = -tardigradeVectorTools::solveLinearSystem(J, R, rank, linearSolver);
 
-            //Perform the linear solve
-            ddx = -tardigradeVectorTools::solveLinearSystem( J, R, rank, linearSolver );
-
-            //Check the rank to make sure the linear system has a unique solution
-            if ( rank != R.size( ) ){
+            // Check the rank to make sure the linear system has a unique solution
+            if (rank != R.size()) {
                 convergeFlag = false;
-                return new errorNode( "newtonRaphson", "The jacobian matrix is singular" );
+                return new errorNode("newtonRaphson", "The jacobian matrix is singular");
             }
 
-            //Apply any boundaries on the variables
-            error = applyBoundaryLimitation( x0 + dx, boundVariableIndices, boundSigns, boundValues, ddx,
-                                             tolr, tola, boundMode );
+            // Apply any boundaries on the variables
+            error = applyBoundaryLimitation(x0 + dx, boundVariableIndices, boundSigns, boundValues, ddx, tolr, tola,
+                                            boundMode);
 
-            if ( error ){
-                errorOut result = new errorNode( "newtonRaphson", "Error in the application of the boundary limitations" );
-                result->addNext( error );
+            if (error) {
+                errorOut result =
+                    new errorNode("newtonRaphson", "Error in the application of the boundary limitations");
+                result->addNext(error);
                 return result;
             }
 
-            //Update dx
+            // Update dx
             dx += ddx;
 
-            if ( resetOuts ){
+            if (resetOuts) {
                 floatOuts = oldFloatOuts;
-                intOuts = oldIntOuts;
+                intOuts   = oldIntOuts;
             }
 
-            //Compute the new residual
+            // Compute the new residual
             error = residual(x0 + dx, floatArgs, intArgs, R, J, floatOuts, intOuts);
 
-            if (error){
-                if ( ( R.size( ) == 101 ) && ( J.size( ) == 212 ) ){ //TODO: Replace with something better
-                    errorOut result = new errorNode( "newtonRaphson", "Convergence error in sub Newton-Raphson process" );
-                    result->addNext( error );
+            if (error) {
+                if ((R.size() == 101) && (J.size() == 212)) {  // TODO: Replace with something better
+                    errorOut result = new errorNode("newtonRaphson", "Convergence error in sub Newton-Raphson process");
+                    result->addNext(error);
                     fatalErrorFlag = false;
-                    convergeFlag = false;
+                    convergeFlag   = false;
                     return result;
-                }
-                else{
+                } else {
                     fatalErrorFlag = true;
-                    errorOut result = new errorNode("newtonRaphson", "Error in residual calculation in non-linear iteration");
+                    errorOut result =
+                        new errorNode("newtonRaphson", "Error in residual calculation in non-linear iteration");
                     result->addNext(error);
                     return result;
                 }
             }
 
-            //Check the line search criteria
-            error = checkLSCriteria( R, Rp, lsCheck, alpha );
+            // Check the line search criteria
+            error = checkLSCriteria(R, Rp, lsCheck, alpha);
 
-            if (error){
+            if (error) {
+                errorOut result = new errorNode(__func__, "Error when checking the tolerance");
 
-                errorOut result = new errorNode( __func__, "Error when checking the tolerance");
-    
-                result->addNext( error );
-    
+                result->addNext(error);
+
                 return result;
-
             }
 
             nLSIterations = 0;
-            lambda = 1;
+            lambda        = 1;
 
-            //Enter line-search if required
-            while ( ( !lsCheck ) && ( nLSIterations < maxLSIterations ) ){
-
-                //Extract ddx from dx
+            // Enter line-search if required
+            while ((!lsCheck) && (nLSIterations < maxLSIterations)) {
+                // Extract ddx from dx
                 dx -= lambda * ddx;
 
-                //Decrement lambda. We could make this fancier but just halving it is probably okay
+                // Decrement lambda. We could make this fancier but just halving it is probably okay
                 lambda *= 0.5;
 
-                //Update dx
+                // Update dx
                 dx += lambda * ddx;
 
-                //Reset floatOuts and intOuts to the previously converged values
+                // Reset floatOuts and intOuts to the previously converged values
                 floatOuts = oldFloatOuts;
                 intOuts   = oldIntOuts;
 
-                //Compute the new residual
-                error = residual( x0 + dx, floatArgs, intArgs, R, J, floatOuts, intOuts );
+                // Compute the new residual
+                error = residual(x0 + dx, floatArgs, intArgs, R, J, floatOuts, intOuts);
 
-                if ( error ){
-                    if ( ( R.size( ) == 101 ) && ( J.size( ) == 212 ) ){//TODO: I continue to hate this
-                        errorOut result = new errorNode( "newtonRaphson", "Convergence error in residual function" );
-                        result->addNext( error );
+                if (error) {
+                    if ((R.size() == 101) && (J.size() == 212)) {  // TODO: I continue to hate this
+                        errorOut result = new errorNode("newtonRaphson", "Convergence error in residual function");
+                        result->addNext(error);
                         fatalErrorFlag = false;
-                        convergeFlag = false;
+                        convergeFlag   = false;
                         return result;
-                    }
-                    else{
-                        fatalErrorFlag = true;
-                        errorOut result = new errorNode( "newtonRaphson", "Error in line-search" );
-                        result->addNext( error );
+                    } else {
+                        fatalErrorFlag  = true;
+                        errorOut result = new errorNode("newtonRaphson", "Error in line-search");
+                        result->addNext(error);
                         return result;
                     }
                 }
 
-                //Perform the line-search check
-                error = checkLSCriteria( R, Rp, lsCheck, alpha );
+                // Perform the line-search check
+                error = checkLSCriteria(R, Rp, lsCheck, alpha);
 
-                if (error){
+                if (error) {
+                    errorOut result = new errorNode(__func__, "Error when checking the line search criteria");
 
-                    errorOut result = new errorNode( __func__, "Error when checking the line search criteria");
-    
-                    result->addNext( error );
-    
+                    result->addNext(error);
+
                     return result;
-
                 }
 
-                //Increment the number of line-search iterations
+                // Increment the number of line-search iterations
                 nLSIterations++;
             }
 
-            if ( !lsCheck ){
-                convergeFlag = false;
+            if (!lsCheck) {
+                convergeFlag   = false;
                 fatalErrorFlag = false;
-                return new errorNode( "newtonRaphson", "The line-search failed to converge." );
-            }
-            else{
+                return new errorNode("newtonRaphson", "The line-search failed to converge.");
+            } else {
                 Rp = R;
-                if ( !resetOuts ){
+                if (!resetOuts) {
                     oldFloatOuts = floatOuts;
                     oldIntOuts   = intOuts;
                 }
             }
 
-            //Check if the solution is converged
-            checkTolerance( R, tol, converged );
+            // Check if the solution is converged
+            checkTolerance(R, tol, converged);
 
-            //Increment nNLIterations
+            // Increment nNLIterations
             nNLIterations++;
         }
 
-        //Check if the solution converged
-        if ( !converged ){
+        // Check if the solution converged
+        if (!converged) {
             convergeFlag = false;
-            return new errorNode( "newtonRaphson", "The Newton-Raphson solver failed to converge." );
-        }
-        else{
-            //Update x
-            x = x0 + dx;
-            //Solver completed successfully
+            return new errorNode("newtonRaphson", "The Newton-Raphson solver failed to converge.");
+        } else {
+            // Update x
+            x            = x0 + dx;
+            // Solver completed successfully
             convergeFlag = true;
             return NULL;
         }
     }
 
-    errorOut homotopySolver( stdFncNLFJ residual, const floatVector &x0,
-                             floatVector &x, bool &convergeFlag, bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
-                             const floatMatrix &floatArgs, const intMatrix &intArgs,
-                             const unsigned int maxNLIterations, const floatType tolr, const floatType tola,
-                             const floatType alpha, const unsigned int maxLSIterations,const floatType ds0,
-                             const floatType dsMin, const bool resetOuts ){
+    errorOut homotopySolver(stdFncNLFJ residual, const floatVector &x0, floatVector &x, bool &convergeFlag,
+                            bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
+                            const floatMatrix &floatArgs, const intMatrix &intArgs, const unsigned int maxNLIterations,
+                            const floatType tolr, const floatType tola, const floatType alpha,
+                            const unsigned int maxLSIterations, const floatType ds0, const floatType dsMin,
+                            const bool resetOuts) {
         /*!
          * Solve a non-linear equation using a homotopy Newton solver. This method
          * can be successful in solving very stiff equations which other techniques
@@ -380,19 +375,19 @@ namespace tardigradeSolverTools{
          * \param resetOuts: Flag for whether the outputs should be reset at each step
          */
 
-        solverType linearSolver;
+        solverType  linearSolver;
         floatMatrix J;
-        return homotopySolver( residual, x0, x, convergeFlag, fatalErrorFlag, floatOuts, intOuts, floatArgs, intArgs, linearSolver, J,
-                               maxNLIterations, tolr, tola, alpha, maxLSIterations, ds0, dsMin, resetOuts );
-
+        return homotopySolver(residual, x0, x, convergeFlag, fatalErrorFlag, floatOuts, intOuts, floatArgs, intArgs,
+                              linearSolver, J, maxNLIterations, tolr, tola, alpha, maxLSIterations, ds0, dsMin,
+                              resetOuts);
     }
 
-    errorOut homotopySolver( stdFncNLFJ residual, const floatVector &x0,
-                             floatVector &x, bool &convergeFlag, bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
-                             const floatMatrix &floatArgs, const intMatrix &intArgs, solverType &linearSolver, floatMatrix &J,
-                             const unsigned int maxNLIterations, const floatType tolr, const floatType tola,
-                             const floatType alpha, const unsigned int maxLSIterations,const floatType ds0,
-                             const floatType dsMin, const bool resetOuts ){
+    errorOut homotopySolver(stdFncNLFJ residual, const floatVector &x0, floatVector &x, bool &convergeFlag,
+                            bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
+                            const floatMatrix &floatArgs, const intMatrix &intArgs, solverType &linearSolver,
+                            floatMatrix &J, const unsigned int maxNLIterations, const floatType tolr,
+                            const floatType tola, const floatType alpha, const unsigned int maxLSIterations,
+                            const floatType ds0, const floatType dsMin, const bool resetOuts) {
         /*!
          * Solve a non-linear equation using a homotopy Newton solver. This method
          * can be successful in solving very stiff equations which other techniques
@@ -424,24 +419,23 @@ namespace tardigradeSolverTools{
          * \param resetOuts: Flag for whether the outputs should be reset at each step
          */
 
-        intVector boundVariableIndices(0);
-        intVector boundSigns(0);
+        intVector   boundVariableIndices(0);
+        intVector   boundSigns(0);
         floatVector boundValues(0);
-        bool boundMode = false;
-        return homotopySolver( residual, x0, x, convergeFlag, fatalErrorFlag, floatOuts, intOuts, floatArgs, intArgs, linearSolver, J,
-                               boundVariableIndices, boundSigns, boundValues, boundMode,
-                               maxNLIterations, tolr, tola, alpha, maxLSIterations, ds0, dsMin, resetOuts );
-
+        bool        boundMode = false;
+        return homotopySolver(residual, x0, x, convergeFlag, fatalErrorFlag, floatOuts, intOuts, floatArgs, intArgs,
+                              linearSolver, J, boundVariableIndices, boundSigns, boundValues, boundMode,
+                              maxNLIterations, tolr, tola, alpha, maxLSIterations, ds0, dsMin, resetOuts);
     }
 
-    errorOut homotopySolver( stdFncNLFJ residual, const floatVector &x0,
-                             floatVector &x, bool &convergeFlag, bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
-                             const floatMatrix &floatArgs, const intMatrix &intArgs, solverType &linearSolver, floatMatrix &J,
-                             const intVector &boundVariableIndices, const intVector &boundSigns, const floatVector &boundValues,
-                             const bool boundMode,
-                             const unsigned int maxNLIterations, const floatType tolr, const floatType tola,
-                             const floatType alpha, const unsigned int maxLSIterations, const floatType ds0,
-                             const floatType dsMin, const bool resetOuts ){
+    errorOut homotopySolver(stdFncNLFJ residual, const floatVector &x0, floatVector &x, bool &convergeFlag,
+                            bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
+                            const floatMatrix &floatArgs, const intMatrix &intArgs, solverType &linearSolver,
+                            floatMatrix &J, const intVector &boundVariableIndices, const intVector &boundSigns,
+                            const floatVector &boundValues, const bool boundMode, const unsigned int maxNLIterations,
+                            const floatType tolr, const floatType tola, const floatType alpha,
+                            const unsigned int maxLSIterations, const floatType ds0, const floatType dsMin,
+                            const bool resetOuts) {
         /*!
          * Solve a non-linear equation using a homotopy Newton solver. This method
          * can be successful in solving very stiff equations which other techniques
@@ -479,36 +473,37 @@ namespace tardigradeSolverTools{
          * \param resetOuts: Flag for whether the outputs should be reset at each step
          */
 
-        //Initialize the homotopy solver
-        floatType ds = ds0;
-        floatType s  = 0;
-        floatVector xh = x0;
-        floatVector xdot = x0;
-        floatVector rh, dxh;
-        solverType ls;
+        // Initialize the homotopy solver
+        floatType    ds   = ds0;
+        floatType    s    = 0;
+        floatVector  xh   = x0;
+        floatVector  xdot = x0;
+        floatVector  rh, dxh;
+        solverType   ls;
         unsigned int rank;
 
-        //Save the floatOuts and intOuts
+        // Save the floatOuts and intOuts
         floatMatrix oldFloatOuts = floatOuts;
         intMatrix   oldIntOuts   = intOuts;
 
-        //Define the homotopy residual equation
+        // Define the homotopy residual equation
         floatVector Rinit;
 
-        //Compute the initial residual
-        errorOut error = residual( x0, floatArgs, intArgs, Rinit, J, floatOuts, intOuts );
+        // Compute the initial residual
+        errorOut error = residual(x0, floatArgs, intArgs, Rinit, J, floatOuts, intOuts);
 
-        if ( error ){
-            fatalErrorFlag = true;
-            errorOut result = new errorNode( "homotopySolver", "error in initial residual calculation" );
-            result->addNext( error );
+        if (error) {
+            fatalErrorFlag  = true;
+            errorOut result = new errorNode("homotopySolver", "error in initial residual calculation");
+            result->addNext(error);
             return result;
         }
 
-        //Define the homotopy residual
+        // Define the homotopy residual
         stdFncNLFJ homotopyResidual;
-        homotopyResidual = [&]( const floatVector &homotopy_x, const floatMatrix &homotopy_floatArgs, const intMatrix &homotopy_intArgs,
-                                floatVector &homotopy_residual, floatMatrix &homotopy_J, floatMatrix &homotopy_floatOuts, intMatrix &homotopy_intOuts ){
+        homotopyResidual = [&](const floatVector &homotopy_x, const floatMatrix &homotopy_floatArgs,
+                               const intMatrix &homotopy_intArgs, floatVector &homotopy_residual,
+                               floatMatrix &homotopy_J, floatMatrix &homotopy_floatOuts, intMatrix &homotopy_intOuts) {
             /*!
              * A sub-function that computes the homotopy residual. This residual takes the original function and maps
              * it to another that is easier to solve. The variables into this function are all the same as in the
@@ -518,99 +513,95 @@ namespace tardigradeSolverTools{
 
             floatVector R;
 
-            error = residual( homotopy_x, homotopy_floatArgs, homotopy_intArgs, R, homotopy_J, homotopy_floatOuts, homotopy_intOuts );
+            error = residual(homotopy_x, homotopy_floatArgs, homotopy_intArgs, R, homotopy_J, homotopy_floatOuts,
+                             homotopy_intOuts);
 
-            if ( error ){
+            if (error) {
                 homotopy_residual = R;
-                errorOut result = new errorNode( "homotopySolver::homotopyResidual", "error in residual calculation" );
-                result->addNext( error );
+                errorOut result   = new errorNode("homotopySolver::homotopyResidual", "error in residual calculation");
+                result->addNext(error);
                 return result;
             }
 
-            homotopy_residual = R - ( 1 - s ) * Rinit;
+            homotopy_residual = R - (1 - s) * Rinit;
 
-            return static_cast< errorOut >( NULL );
+            return static_cast<errorOut>(NULL);
         };
 
-        //Begin the homotopy loop
-        while ( s < 1 ){
-
-            //Update s
+        // Begin the homotopy loop
+        while (s < 1) {
+            // Update s
             s += ds;
-            s = std::min( s, 1. );
+            s = std::min(s, 1.);
 
-            //Initialize the solver
+            // Initialize the solver
             convergeFlag = false;
 
-            if ( !resetOuts ){
+            if (!resetOuts) {
                 oldFloatOuts = floatOuts;
                 oldIntOuts   = intOuts;
-            }
-            else{
+            } else {
                 floatOuts = oldFloatOuts;
                 intOuts   = oldIntOuts;
             }
 
-            //Begin the adaptive homotopy loop
-            while ( !convergeFlag ){
+            // Begin the adaptive homotopy loop
+            while (!convergeFlag) {
+                // Compute the explicit estimate of xh ( this is kind of what makes it a homotopy )
+                error = homotopyResidual(xh, floatArgs, intArgs, rh, J, floatOuts, intOuts);
 
-                //Compute the explicit estimate of xh ( this is kind of what makes it a homotopy )
-                error = homotopyResidual( xh, floatArgs, intArgs, rh, J, floatOuts, intOuts );
-    
-                if ( error ){
-                    fatalErrorFlag = true;
-                    convergeFlag = false;
-                    errorOut result = new errorNode( "homotopySolver", "The explicit homotopy estimate of x failed in an unexpected way. This shouldn't happen." );
-                    result->addNext( error );
+                if (error) {
+                    fatalErrorFlag  = true;
+                    convergeFlag    = false;
+                    errorOut result = new errorNode(
+                        "homotopySolver",
+                        "The explicit homotopy estimate of x failed in an unexpected way. This shouldn't happen.");
+                    result->addNext(error);
                     return result;
                 }
 
                 floatOuts = oldFloatOuts;
                 intOuts   = oldIntOuts;
-    
-                xdot = -tardigradeVectorTools::solveLinearSystem( J, rh, rank );
-   
-                if ( rank != J.size( ) ){
-                    convergeFlag = false;
+
+                xdot = -tardigradeVectorTools::solveLinearSystem(J, rh, rank);
+
+                if (rank != J.size()) {
+                    convergeFlag   = false;
                     fatalErrorFlag = false;
-                }
-                else{
-    
+                } else {
                     dxh = ds * xdot;
 
-                    error = applyBoundaryLimitation( xh, boundVariableIndices, boundSigns, boundValues, dxh, tolr, tola, boundMode );
-    
-                    if ( error ){
-                        errorOut result = new errorNode( "homotopySolve", "Fatal error in application of boundary limitations" );
-                        result->addNext( error );
+                    error = applyBoundaryLimitation(xh, boundVariableIndices, boundSigns, boundValues, dxh, tolr, tola,
+                                                    boundMode);
+
+                    if (error) {
+                        errorOut result =
+                            new errorNode("homotopySolve", "Fatal error in application of boundary limitations");
+                        result->addNext(error);
                         fatalErrorFlag = true;
                         return result;
                     }
 
-                    error = newtonRaphson( homotopyResidual, xh + dxh, x, convergeFlag, fatalErrorFlag, floatOuts, intOuts,
-                                           floatArgs, intArgs, linearSolver, J, boundVariableIndices, boundSigns, boundValues,
-                                           boundMode,
-                                           maxNLIterations, tolr, tola,
-                                           alpha, maxLSIterations, resetOuts );
-    
+                    error = newtonRaphson(homotopyResidual, xh + dxh, x, convergeFlag, fatalErrorFlag, floatOuts,
+                                          intOuts, floatArgs, intArgs, linearSolver, J, boundVariableIndices,
+                                          boundSigns, boundValues, boundMode, maxNLIterations, tolr, tola, alpha,
+                                          maxLSIterations, resetOuts);
                 }
-    
-                if ( fatalErrorFlag ){
-                    errorOut result = new errorNode( "homotopySolver", "Fatal error in Newton Raphson solution" );
-                    result->addNext( error );
+
+                if (fatalErrorFlag) {
+                    errorOut result = new errorNode("homotopySolver", "Fatal error in Newton Raphson solution");
+                    result->addNext(error);
                     return result;
-                }
-                else if ( ( !convergeFlag ) && ( ds / 2 >= dsMin ) ){
+                } else if ((!convergeFlag) && (ds / 2 >= dsMin)) {
                     s -= ds;
-                    ds = std::max( ds / 2, dsMin );
+                    ds = std::max(ds / 2, dsMin);
                     s += ds;
-    
+
                     floatOuts = oldFloatOuts;
                     intOuts   = oldIntOuts;
-                }
-                else if ( ( !convergeFlag ) && ( ds / 2 < dsMin ) ){
-                    errorOut result = new errorNode( "homotopySolver", "Homotopy solver did not converge" );
-                    result->addNext( error );
+                } else if ((!convergeFlag) && (ds / 2 < dsMin)) {
+                    errorOut result = new errorNode("homotopySolver", "Homotopy solver did not converge");
+                    result->addNext(error);
                     return result;
                 }
             }
@@ -618,11 +609,11 @@ namespace tardigradeSolverTools{
             xh = x;
         }
 
-        //Solver completed successfully
+        // Solver completed successfully
         return NULL;
     }
 
-    errorOut checkTolerance( const floatVector &R, const floatVector &tol, bool &result){
+    errorOut checkTolerance(const floatVector &R, const floatVector &tol, bool &result) {
         /*!
          * Check whether the residual vector meets the tolerance returning a boolean.
          *
@@ -631,12 +622,12 @@ namespace tardigradeSolverTools{
          * \param result: The result
          */
 
-        if (R.size() != tol.size()){
+        if (R.size() != tol.size()) {
             return new errorNode("checkTolerance", "The residual and tolerance vectors don't have the same size");
         }
 
-        for (unsigned int i=0; i<R.size(); i++){
-            if (fabs(R[i])>tol[i]){
+        for (unsigned int i = 0; i < R.size(); i++) {
+            if (fabs(R[i]) > tol[i]) {
                 result = false;
                 return NULL;
             }
@@ -645,7 +636,7 @@ namespace tardigradeSolverTools{
         return NULL;
     }
 
-    errorOut checkLSCriteria( const floatVector &R, const floatVector &Rp, bool &result, const floatType alpha){
+    errorOut checkLSCriteria(const floatVector &R, const floatVector &Rp, bool &result, const floatType alpha) {
         /*!
          * Perform the check on the line-search criteria setting result to false if the new residual does not meet it.
          * \f$l2norm(R) < (1 - alpha)* l2norm(Rp)\f$
@@ -656,21 +647,21 @@ namespace tardigradeSolverTools{
          * \param &alpha: The scaling factor on Rp
          */
 
-        if (R.size() != Rp.size()){
+        if (R.size() != Rp.size()) {
             return new errorNode("errorOut", "R and Rp have different sizes");
         }
 
-        if (R.size() == 0){
+        if (R.size() == 0) {
             return new errorNode("errorOut", "R has a size of zero");
         }
 
-        result = tardigradeVectorTools::dot(R, R) < (1 - alpha)*tardigradeVectorTools::dot(Rp, Rp);
+        result = tardigradeVectorTools::dot(R, R) < (1 - alpha) * tardigradeVectorTools::dot(Rp, Rp);
 
         return NULL;
     }
 
-    errorOut finiteDifference( stdFncNLF fxn, const floatVector &x0,
-                            floatMatrix &grad, const floatMatrix &floatArgs, const intMatrix &intArgs, const floatType eps){
+    errorOut finiteDifference(stdFncNLF fxn, const floatVector &x0, floatMatrix &grad, const floatMatrix &floatArgs,
+                              const intMatrix &intArgs, const floatType eps) {
         /*!
          * Perform a forward finite difference gradient solve of the provided function.
          * Note that for functions that are more (or less) complex than this you may need to
@@ -685,12 +676,12 @@ namespace tardigradeSolverTools{
          * \param eps: The perturbation. delta[i] = eps*(x0[i]) + eps
          */
 
-        //Initialize the first value and the gradient
+        // Initialize the first value and the gradient
         floatVector y0, yi;
 
-        //Compute the first value
+        // Compute the first value
         errorOut error = fxn(x0, floatArgs, intArgs, y0);
-        if (error){
+        if (error) {
             errorOut result = new errorNode("finiteDifference", "Error in initial function calculation");
             result->addNext(error);
             return result;
@@ -698,31 +689,30 @@ namespace tardigradeSolverTools{
 
         grad = floatMatrix(y0.size(), floatVector(x0.size(), 0));
 
-        for (unsigned int i=0; i<x0.size(); i++){
-            //Set the step size
+        for (unsigned int i = 0; i < x0.size(); i++) {
+            // Set the step size
             floatVector delta = floatVector(x0.size(), 0);
-            delta[i] = eps*fabs(x0[i]) + eps;
+            delta[i]          = eps * fabs(x0[i]) + eps;
 
-            //Compute the function after perturbation
+            // Compute the function after perturbation
             error = fxn(x0 + delta, floatArgs, intArgs, yi);
-            if (error){
+            if (error) {
                 errorOut result = new errorNode("finiteDifference", "Error in function calculation");
                 result->addNext(error);
                 return result;
             }
 
-            //Set the terms of the gradient
-            for (unsigned int j=0; j<yi.size(); j++){
-                grad[j][i] = (yi[j] - y0[j])/delta[i];
+            // Set the terms of the gradient
+            for (unsigned int j = 0; j < yi.size(); j++) {
+                grad[j][i] = (yi[j] - y0[j]) / delta[i];
             }
         }
         return NULL;
     }
 
-    errorOut checkJacobian( stdFncNLFJ residual,
-                            const floatVector &x0,
-                            const floatMatrix &floatArgs, const intMatrix &intArgs, bool &isGood, const floatType eps,
-                            const floatType tolr, const floatType tola, const bool suppressOutput){
+    errorOut checkJacobian(stdFncNLFJ residual, const floatVector &x0, const floatMatrix &floatArgs,
+                           const intMatrix &intArgs, bool &isGood, const floatType eps, const floatType tolr,
+                           const floatType tola, const bool suppressOutput) {
         /*!
          * Check if the jacobian is correct. Used as a debugging tool.
          *
@@ -738,36 +728,36 @@ namespace tardigradeSolverTools{
          * \param suppressOutput: Suppress the output to the terminal
          */
 
-        //Wrap the residual function to hide the jacobian
+        // Wrap the residual function to hide the jacobian
         stdFncNLF residual_;
         residual_ = [&](const floatVector &x_, const floatMatrix &floatArgs_, const intMatrix &intArgs_,
-                            floatVector &r){
+                        floatVector &r) {
             floatMatrix Jtmp;
             floatMatrix fO;
-            intMatrix iO;
+            intMatrix   iO;
             return residual(x_, floatArgs_, intArgs_, r, Jtmp, fO, iO);
         };
 
-        //Compute the finite difference jacobian
+        // Compute the finite difference jacobian
         floatMatrix finiteDifferenceJ;
-        errorOut error = finiteDifference( residual_, x0, finiteDifferenceJ, floatArgs, intArgs);
+        errorOut    error = finiteDifference(residual_, x0, finiteDifferenceJ, floatArgs, intArgs);
 
-        if (error){
+        if (error) {
             errorOut result = new errorNode("checkJacobian", "Error in finite difference");
             result->addNext(error);
             return error;
         }
 
-        //Compute the analytic jacobian
+        // Compute the analytic jacobian
         floatVector rtmp;
         floatMatrix analyticJ;
         floatMatrix floatOuts;
-        intMatrix intOuts;
+        intMatrix   intOuts;
         residual(x0, floatArgs, intArgs, rtmp, analyticJ, floatOuts, intOuts);
 
         isGood = tardigradeVectorTools::fuzzyEquals(finiteDifferenceJ, analyticJ, tolr, tola);
 
-        if ((!isGood) && (!suppressOutput)){
+        if ((!isGood) && (!suppressOutput)) {
             std::cout << "Jacobian is not within tolerance.\nError:\n";
             tardigradeVectorTools::print(analyticJ - finiteDifferenceJ);
         }
@@ -775,7 +765,7 @@ namespace tardigradeSolverTools{
         return NULL;
     }
 
-    errorOut aFxn( const floatType &pseudoT, const floatType logAMax, floatType &a ){
+    errorOut aFxn(const floatType &pseudoT, const floatType logAMax, floatType &a) {
         /*!
          * Compute the a parameter for the Barrier Function
          *
@@ -784,16 +774,16 @@ namespace tardigradeSolverTools{
          * \param &a: The current value of a
          */
 
-        a = std::exp( pseudoT * logAMax );
+        a = std::exp(pseudoT * logAMax);
 
         return NULL;
     }
 
-    errorOut aFxn( const floatType &pseudoT, const floatType logAMax, floatType &a, floatType &dadt ){
+    errorOut aFxn(const floatType &pseudoT, const floatType logAMax, floatType &a, floatType &dadt) {
         /*!
          * Compute the a parameter for the Barrier Function along with the derivative w.r.t.
          * the pseudo time ( \f$t^s\f$ ).
-         * 
+         *
          * \f$a = exp( log(A^{max}) t^s )\f$
          *
          * \param &pseudoT: The pseudo time ( 0 - 1 )
@@ -802,11 +792,11 @@ namespace tardigradeSolverTools{
          * \param &dadt: The Jacobian of a w.r.t. pseudoT.
          */
 
-        errorOut error = aFxn( pseudoT, logAMax, a );
+        errorOut error = aFxn(pseudoT, logAMax, a);
 
-        if ( error ){
-            errorOut result = new errorNode( "aFxn (jacobian)", "Error in computation of a" );
-            result->addNext( error );
+        if (error) {
+            errorOut result = new errorNode("aFxn (jacobian)", "Error in computation of a");
+            result->addNext(error);
             return result;
         }
 
@@ -815,15 +805,15 @@ namespace tardigradeSolverTools{
         return NULL;
     }
 
-    errorOut computeBarrierFunction( const floatType &x, const floatType &pseudoT, const floatType &logAmax,
-                                     const floatType &b, const bool &sign, floatType &barrierFunction ){
+    errorOut computeBarrierFunction(const floatType &x, const floatType &pseudoT, const floatType &logAmax,
+                                    const floatType &b, const bool &sign, floatType &barrierFunction) {
         /*!
          * Compute the barrier function for the constraint.
          *
          * \f$b = exp( s a( t^s ) ( b - x ) ) - 1\f$
          *
          * where
-         * 
+         *
          * - \f$s =  1\f$ is a negative boundary
          * - \f$s = -1\f$ is a positive boundary
          *
@@ -837,34 +827,34 @@ namespace tardigradeSolverTools{
          */
 
         floatType a;
-        errorOut error = aFxn( pseudoT, logAmax, a );
+        errorOut  error = aFxn(pseudoT, logAmax, a);
 
-        if ( error ){
-            errorOut result = new errorNode( "computeBarrierFunction", "Error in the computation of the 'a' value" );
-            result->addNext( error );
+        if (error) {
+            errorOut result = new errorNode("computeBarrierFunction", "Error in the computation of the 'a' value");
+            result->addNext(error);
             return result;
         }
 
         floatType s = 1;
-        if ( sign ){
+        if (sign) {
             s = -1;
         }
 
-        barrierFunction = std::exp( s * a * ( b - x ) ) - 1;
+        barrierFunction = std::exp(s * a * (b - x)) - 1;
 
         return NULL;
     }
 
-    errorOut computeBarrierFunction( const floatType &x, const floatType &pseudoT, const floatType &logAmax,
-                                      const floatType &b, const bool &sign, floatType &barrierFunction,
-                                      floatType &dbdx, floatType &dbdt ){
+    errorOut computeBarrierFunction(const floatType &x, const floatType &pseudoT, const floatType &logAmax,
+                                    const floatType &b, const bool &sign, floatType &barrierFunction, floatType &dbdx,
+                                    floatType &dbdt) {
         /*!
          * Compute the barrier function for a positivity constraint where the barrier is defined as
          *
          * \f$b = exp( s * a * ( b - x ) ) - 1\f$
          *
          * where
-         * 
+         *
          * - \f$s =  1\f$ is a negative boundary
          * - \f$s = -1\f$ is a positive boundary
          *
@@ -880,50 +870,53 @@ namespace tardigradeSolverTools{
          */
 
         floatType a, dadt;
-        errorOut error = aFxn( pseudoT, logAmax, a, dadt );
+        errorOut  error = aFxn(pseudoT, logAmax, a, dadt);
 
-        if ( error ){
-            errorOut result = new errorNode( "computeBarrierFunction (jacobian)", "Error in the computation of the 'a' value" );
-            result->addNext( error );
+        if (error) {
+            errorOut result =
+                new errorNode("computeBarrierFunction (jacobian)", "Error in the computation of the 'a' value");
+            result->addNext(error);
             return result;
         }
 
         floatType s = 1;
-        if ( sign ){
+        if (sign) {
             s = -1;
         }
 
-        barrierFunction = std::exp( s * a * ( b - x ) ) - 1;
+        barrierFunction = std::exp(s * a * (b - x)) - 1;
 
-        dbdx = -s * a * std::exp( s * a * ( b - x ) );
-        dbdt = s * ( b - x ) * std::exp( s * a * ( b - x ) ) * dadt;
+        dbdx = -s * a * std::exp(s * a * (b - x));
+        dbdt = s * (b - x) * std::exp(s * a * (b - x)) * dadt;
 
         return NULL;
     }
 
-    errorOut computeBarrierHomotopyResidual( stdFncNLFJ computeOriginalResidual, const tardigradeSolverTools::floatVector &x,
-                                             const tardigradeSolverTools::floatMatrix &floatArgs, const tardigradeSolverTools::intMatrix &intArgs,
-                                             tardigradeSolverTools::floatVector &residual, tardigradeSolverTools::floatMatrix &jacobian,
-                                             tardigradeSolverTools::floatMatrix &floatOuts, tardigradeSolverTools::intMatrix &intOuts
-                                           ){
+    errorOut computeBarrierHomotopyResidual(
+        stdFncNLFJ computeOriginalResidual, const tardigradeSolverTools::floatVector &x,
+        const tardigradeSolverTools::floatMatrix &floatArgs, const tardigradeSolverTools::intMatrix &intArgs,
+        tardigradeSolverTools::floatVector &residual, tardigradeSolverTools::floatMatrix &jacobian,
+        tardigradeSolverTools::floatMatrix &floatOuts, tardigradeSolverTools::intMatrix &intOuts) {
         /*!
          * Compute the residual function for the barrier homotopy approach. This approach allows the user
          * to define barrier functions which enable a bounded root finding approach which can be very useful
          * when roots outside of the desired solution space have stronger basins of attraction than the
          * desired roots.
-         * 
+         *
          * The updated residual is defined as
-         * 
-         * \f$R^b = \sum_{i=1}^{N^{barriers}} \left[\left( 1 - \frac{1}{a(t^s)} \right) R + \frac{1}{a\left(t^s\right)} b \right]\f$
-         * 
+         *
+         * \f$R^b = \sum_{i=1}^{N^{barriers}} \left[\left( 1 - \frac{1}{a(t^s)} \right) R + \frac{1}{a\left(t^s\right)}
+         * b \right]\f$
+         *
          * where \f$R^b\f$ is the barrier residual, \f$N^{barriers}\f$ are the number of barrier functions to add,
          * \f$a\f$ is a parameter that is a function of pseudo-time \f$t^s\f$, and \f$b\f$ is the barrier function.
          *
-         * \warning \emoji :warning: \emoji :warning: \emoji :warning: \b WARNING \emoji :warning: \emoji :warning: \emoji :warning:
-         *     WARNING: If two `residualIndices` are identical, then only the second one will be used and the  first equation will not be observed.
+         * \warning \emoji :warning: \emoji :warning: \emoji :warning: \b WARNING \emoji :warning: \emoji :warning:
+         * \emoji :warning: WARNING: If two `residualIndices` are identical, then only the second one will be used and
+         * the  first equation will not be observed.
          *
          * \todo{Add two-sided boundaries.}
-         * 
+         *
          * \param computeOriginalResidual: The original residual function
          * \param &x: The solution vector.
          * \param &floatArgs: The floating point arguments.
@@ -936,135 +929,136 @@ namespace tardigradeSolverTools{
          * Note that floatArgs is modified such that
          * `floatArgs[ 0 ][ 0 ]`   = `pseudoTime` ( the homotopy pseudo-time )
          * `floatArgs[ 1 ]`        = `barrierValues` ( the values at which the barrier function activates )
-         * `floatArgs[ 2 ]`        = `logAMaxValues` ( the maximum values of the \f$a\f$ parameter for the barrier function )
-         * `floatArgs[ 1 -> end ]` = originalResidual `floatArgs` ( the `floatArgs` of the original residual function )
+         * `floatArgs[ 2 ]`        = `logAMaxValues` ( the maximum values of the \f$a\f$ parameter for the barrier
+         * function ) `floatArgs[ 1 -> end ]` = originalResidual `floatArgs` ( the `floatArgs` of the original residual
+         * function )
          *
          * Note that intArgs is modified such that
          * `intArgs[ 0 ]` = `variableIndices` ( the indices of the variables which have the barrier functions applied )
-         * `intArgs[ 1 ]` = `residualIndices` ( the indices of the residual vector at which the barrier functions are applied )
-         * `intArgs[ 2 ]` = `barrierSigns` ( the signs of the barrier functions 0 for negative barrier
-         *     ( lower boundary ) and 1 for a positive barrier ( upper boundary )
-         * `intArgs[ 3 -> end ]` = originalResidual `intArgs` ( the `intArgs` of the original residual function )
+         * `intArgs[ 1 ]` = `residualIndices` ( the indices of the residual vector at which the barrier functions are
+         * applied ) `intArgs[ 2 ]` = `barrierSigns` ( the signs of the barrier functions 0 for negative barrier ( lower
+         * boundary ) and 1 for a positive barrier ( upper boundary ) `intArgs[ 3 -> end ]` = originalResidual `intArgs`
+         * ( the `intArgs` of the original residual function )
          *
          * The pseudo-time allows us to change the influence of the barrier function on the output.
          */
 
-        if ( floatArgs.size() < 3 ){
-            return new errorNode( "computeBarrierHomotopyResidual", "floatArgs must have at least a size of 3" );
+        if (floatArgs.size() < 3) {
+            return new errorNode("computeBarrierHomotopyResidual", "floatArgs must have at least a size of 3");
         }
 
-        if ( intArgs.size() < 3 ){
-            return new errorNode( "computeBarrierHomotopyResidual", "intArgs must have at least a size of 3" );
+        if (intArgs.size() < 3) {
+            return new errorNode("computeBarrierHomotopyResidual", "intArgs must have at least a size of 3");
         }
 
-        //Extract the floatArgs values
-        floatType pseudoTime      = floatArgs[ 0 ][ 0 ];
-        floatVector barrierValues = floatArgs[ 1 ];
-        floatVector logAMaxValues = floatArgs[ 2 ];
+        // Extract the floatArgs values
+        floatType   pseudoTime    = floatArgs[0][0];
+        floatVector barrierValues = floatArgs[1];
+        floatVector logAMaxValues = floatArgs[2];
 
-        floatMatrix floatArgsOriginalResidual( floatArgs.begin() + 3, floatArgs.begin() + floatArgs.size() );
+        floatMatrix floatArgsOriginalResidual(floatArgs.begin() + 3, floatArgs.begin() + floatArgs.size());
 
-        //Extract the intArgs values
-        intVector variableIndices = intArgs[ 0 ];
-        intVector residualIndices = intArgs[ 1 ];
-        std::vector< bool > barrierSigns( intArgs[ 2 ].size() );
-        for ( unsigned int i = 0; i < barrierSigns.size(); i++ ){
-            barrierSigns[ i ] = ( bool )intArgs[ 2 ][ i ];
+        // Extract the intArgs values
+        intVector         variableIndices = intArgs[0];
+        intVector         residualIndices = intArgs[1];
+        std::vector<bool> barrierSigns(intArgs[2].size());
+        for (unsigned int i = 0; i < barrierSigns.size(); i++) {
+            barrierSigns[i] = (bool)intArgs[2][i];
         }
 
-        intMatrix intArgsOriginalResidual( intArgs.begin() + 3, intArgs.begin() + intArgs.size() );
+        intMatrix intArgsOriginalResidual(intArgs.begin() + 3, intArgs.begin() + intArgs.size());
 
         unsigned int nBarriers = variableIndices.size();
 
-        if ( ( residualIndices.size() != nBarriers ) || ( barrierValues.size() != nBarriers ) || ( logAMaxValues.size() != nBarriers ) || ( barrierSigns.size() != nBarriers ) ){
-            std::string output_message = "The sizes of variableIndices, residualIndices, barrierValues, and logAMaxValues are not the same\n";
-            output_message            += "    variableIndices: " + std::to_string( variableIndices.size() ) + "\n";
-            output_message            += "    residualIndices: " + std::to_string( residualIndices.size() ) + "\n";
-            output_message            += "    barrierValues:   " + std::to_string( barrierValues.size() ) + "\n";
-            output_message            += "    logAMaxValues:   " + std::to_string( logAMaxValues.size() ) + "\n";
-            output_message            += "    barrierSigns:    " + std::to_string( barrierSigns.size() ) + "\n";
-            return new errorNode( "computeBarrierHomotopyResidual", output_message.c_str() );
+        if ((residualIndices.size() != nBarriers) || (barrierValues.size() != nBarriers) ||
+            (logAMaxValues.size() != nBarriers) || (barrierSigns.size() != nBarriers)) {
+            std::string output_message =
+                "The sizes of variableIndices, residualIndices, barrierValues, and logAMaxValues are not the same\n";
+            output_message += "    variableIndices: " + std::to_string(variableIndices.size()) + "\n";
+            output_message += "    residualIndices: " + std::to_string(residualIndices.size()) + "\n";
+            output_message += "    barrierValues:   " + std::to_string(barrierValues.size()) + "\n";
+            output_message += "    logAMaxValues:   " + std::to_string(logAMaxValues.size()) + "\n";
+            output_message += "    barrierSigns:    " + std::to_string(barrierSigns.size()) + "\n";
+            return new errorNode("computeBarrierHomotopyResidual", output_message.c_str());
         }
 
-        //Evaluate the original residual
+        // Evaluate the original residual
         floatVector originalResidual;
         floatMatrix originalJacobian;
         floatMatrix originalFloatOuts = floatOuts;
-        errorOut error = computeOriginalResidual( x,
-                                                  floatArgsOriginalResidual, intArgsOriginalResidual,
-                                                  originalResidual, originalJacobian,
-                                                  originalFloatOuts, intOuts
-                                                );
-        residual = originalResidual;
-        jacobian = originalJacobian;
+        errorOut    error             = computeOriginalResidual(x, floatArgsOriginalResidual, intArgsOriginalResidual,
+                                                                originalResidual, originalJacobian, originalFloatOuts, intOuts);
+        residual                      = originalResidual;
+        jacobian                      = originalJacobian;
 
-        if ( error ){
-            errorOut result = new errorNode( "computeBarrierHomotopyResidual", "Error in the computation of the plastic deformation residual" );
-            result->addNext( error );
+        if (error) {
+            errorOut result = new errorNode("computeBarrierHomotopyResidual",
+                                            "Error in the computation of the plastic deformation residual");
+            result->addNext(error);
             return result;
         }
 
-        //Compute the values of the barrier functions and the weighting functions
+        // Compute the values of the barrier functions and the weighting functions
         floatType barrierFunction = 0;
-        floatType dbdx = 0;
-        floatType dbdt = 0;
-        floatType a    = 1;
-        floatType dadt = 0;
+        floatType dbdx            = 0;
+        floatType dbdt            = 0;
+        floatType a               = 1;
+        floatType dadt            = 0;
 
-        //Update the gradients of the residuals and Jacobian
-        floatVector dresidualdt( residual.size(), 0 );
+        // Update the gradients of the residuals and Jacobian
+        floatVector dresidualdt(residual.size(), 0);
 
-        for ( unsigned int i = 0; i < nBarriers; i++ ){
-            error = computeBarrierFunction( x[ variableIndices[ i ] ], pseudoTime, logAMaxValues[ i ],
-                                            barrierValues[ i ], barrierSigns[ i ],
-                                            barrierFunction, dbdx, dbdt );
+        for (unsigned int i = 0; i < nBarriers; i++) {
+            error = computeBarrierFunction(x[variableIndices[i]], pseudoTime, logAMaxValues[i], barrierValues[i],
+                                           barrierSigns[i], barrierFunction, dbdx, dbdt);
 
-            if ( error ){
-                std::string output_message = "Error in the computation of barrier function " + std::to_string( i );
-                errorOut result = new errorNode( "computeBarrierHomotopyResidual", output_message.c_str() );
-                result->addNext( error );
+            if (error) {
+                std::string output_message = "Error in the computation of barrier function " + std::to_string(i);
+                errorOut    result         = new errorNode("computeBarrierHomotopyResidual", output_message.c_str());
+                result->addNext(error);
                 return result;
             }
 
-            //Compute the weighting values
-            error = aFxn( pseudoTime, logAMaxValues[ i ], a, dadt );
+            // Compute the weighting values
+            error = aFxn(pseudoTime, logAMaxValues[i], a, dadt);
 
-            if ( error ){
-                std::string output_message = "Error in the computation of the 'a' parameter of barrier equation " + std::to_string( i );
-                errorOut result = new errorNode( "computeBarrierHomotopyResidual", output_message.c_str() );
-                result->addNext( error );
+            if (error) {
+                std::string output_message =
+                    "Error in the computation of the 'a' parameter of barrier equation " + std::to_string(i);
+                errorOut result = new errorNode("computeBarrierHomotopyResidual", output_message.c_str());
+                result->addNext(error);
                 return result;
             }
 
-            //Assemble the homotopy residual
-            residual[ residualIndices[ i ] ] = ( 1. - 1. / a ) * originalResidual[ residualIndices[ i ] ] + ( 1. / a ) * barrierFunction;
+            // Assemble the homotopy residual
+            residual[residualIndices[i]] =
+                (1. - 1. / a) * originalResidual[residualIndices[i]] + (1. / a) * barrierFunction;
 
-            //Assemble the derivative of the homotopy residual w.r.t. the pseudo time
-            dresidualdt[ residualIndices[ i ] ] = 1 / ( a * a ) * dadt * originalResidual[ residualIndices[ i ] ]
-                                                - 1 / ( a * a ) * dadt * barrierFunction
-                                                + ( 1 / a ) * dbdt;
+            // Assemble the derivative of the homotopy residual w.r.t. the pseudo time
+            dresidualdt[residualIndices[i]] = 1 / (a * a) * dadt * originalResidual[residualIndices[i]] -
+                                              1 / (a * a) * dadt * barrierFunction + (1 / a) * dbdt;
 
-            //Add the terms to the jacobian ( dresidualdx )
-            for ( unsigned int j = 0; j < jacobian[ i ].size(); j++ ){
-                jacobian[ residualIndices[ i ] ][ j ] = ( 1. - 1. / a ) * originalJacobian[ residualIndices[ i ] ][ j ];
+            // Add the terms to the jacobian ( dresidualdx )
+            for (unsigned int j = 0; j < jacobian[i].size(); j++) {
+                jacobian[residualIndices[i]][j] = (1. - 1. / a) * originalJacobian[residualIndices[i]][j];
             }
 
-            jacobian[ residualIndices[ i ] ][ variableIndices[ i ] ] += ( 1. / a ) * dbdx;
+            jacobian[residualIndices[i]][variableIndices[i]] += (1. / a) * dbdx;
         }
 
-        //Save the jacobian of the residual w.r.t. the pseudo time. This is inserted at the beginning of the floatOuts.
-        floatOuts = floatMatrix( originalFloatOuts.size() + 1 );
-        floatOuts[ 0 ] = dresidualdt;
-        for ( unsigned int i = 0; i < originalFloatOuts.size(); i++ ){
-            floatOuts[ i + 1 ] = originalFloatOuts[ i ];
+        // Save the jacobian of the residual w.r.t. the pseudo time. This is inserted at the beginning of the floatOuts.
+        floatOuts    = floatMatrix(originalFloatOuts.size() + 1);
+        floatOuts[0] = dresidualdt;
+        for (unsigned int i = 0; i < originalFloatOuts.size(); i++) {
+            floatOuts[i + 1] = originalFloatOuts[i];
         }
 
         return NULL;
     }
 
-    errorOut applyBoundaryLimitation( const floatVector &x0, const intVector &variableIndices, const intVector &barrierSigns,
-                                      const floatVector &barrierValues, floatVector &dx, const floatType tolr,
-                                      const floatType tola, const bool mode ){
+    errorOut applyBoundaryLimitation(const floatVector &x0, const intVector &variableIndices,
+                                     const intVector &barrierSigns, const floatVector &barrierValues, floatVector &dx,
+                                     const floatType tolr, const floatType tola, const bool mode) {
         /*!
          * Apply the boundary limitation to the update step.
          * dx will either be scaled so that all of the variables respect the boundaries or each variable which
@@ -1086,61 +1080,55 @@ namespace tardigradeSolverTools{
 
         unsigned int nBounds = variableIndices.size();
 
-        if ( ( barrierSigns.size() != nBounds ) || ( barrierValues.size() != nBounds ) ){
-
+        if ((barrierSigns.size() != nBounds) || (barrierValues.size() != nBounds)) {
             std::string output_message = "The defined barrier are not consistent in size\n";
-            output_message            += "    variableIndices: " + std::to_string( variableIndices.size() ) + "\n";
-            output_message            += "    barrierSigns:    " + std::to_string( barrierSigns.size() ) + "\n";                                                                                                            output_message            += "    barrierValues:   " + std::to_string( barrierValues.size() ) + "\n";
-            return new errorNode( "applyBoundaryLimitations", output_message.c_str() );
+            output_message += "    variableIndices: " + std::to_string(variableIndices.size()) + "\n";
+            output_message += "    barrierSigns:    " + std::to_string(barrierSigns.size()) + "\n";
+            output_message += "    barrierValues:   " + std::to_string(barrierValues.size()) + "\n";
+            return new errorNode("applyBoundaryLimitations", output_message.c_str());
         }
 
-        //Initialize variables
-        int index;
+        // Initialize variables
+        int       index;
         floatType tol, d;
         floatType scaleFactor = 1.0;
 
-        //Do the barrier search
-        for ( unsigned int i = 0; i < nBounds; i++ ){
+        // Do the barrier search
+        for (unsigned int i = 0; i < nBounds; i++) {
+            // Extract the index of the variable
+            index = variableIndices[i];
 
-            //Extract the index of the variable
-            index = variableIndices[ i ];
- 
-            //Calculate the tolerance
+            // Calculate the tolerance
             //
-            //This relative tolerance is not the only tolerance that could be used.
-            //It does allow for the constraints to be violated but this should be very small
-            //compared to the magnitude of the previously converged value.                              
-            tol = tolr * fabs( x0[ index ] ) + tola;
+            // This relative tolerance is not the only tolerance that could be used.
+            // It does allow for the constraints to be violated but this should be very small
+            // compared to the magnitude of the previously converged value.
+            tol = tolr * fabs(x0[index]) + tola;
 
-            //Determine the amount of constraint violation
-            d = ( x0[ index ] + dx[ index ] ) - barrierValues[ i ];
-            if ( barrierSigns[ i ] == 0 ){
+            // Determine the amount of constraint violation
+            d = (x0[index] + dx[index]) - barrierValues[i];
+            if (barrierSigns[i] == 0) {
                 d *= -1;
+            } else if (barrierSigns[i] != 1) {
+                return new errorNode("applyBoundaryLimitation", "The barrier sign must be zero or 1");
             }
-            else if ( barrierSigns[ i ] != 1 ){
-                return new errorNode( "applyBoundaryLimitation", "The barrier sign must be zero or 1" );
-            }
 
-            d = 0.5 * ( d + fabs( d ) );
+            d = 0.5 * (d + fabs(d));
 
-            //Determine the required scale factor
-            if ( d > tol ){
+            // Determine the required scale factor
+            if (d > tol) {
+                if (mode) {
+                    dx[index] = barrierValues[i] - x0[index];
 
-                if ( mode ){
-
-                    dx[ index ] = barrierValues[ i ] - x0[ index ];
-
-                }
-                else{
-
-                    scaleFactor = std::min( scaleFactor, ( barrierValues[ i ] - x0[ index ] ) / dx[ index ] );
+                } else {
+                    scaleFactor = std::min(scaleFactor, (barrierValues[i] - x0[index]) / dx[index]);
                 }
             }
         }
 
-        //Scale the dx vector if appropriate
-        if ( !mode ){
-            if ( !tardigradeVectorTools::fuzzyEquals( scaleFactor, 1.0 ) ){
+        // Scale the dx vector if appropriate
+        if (!mode) {
+            if (!tardigradeVectorTools::fuzzyEquals(scaleFactor, 1.0)) {
                 dx *= scaleFactor;
             }
         }
@@ -1148,16 +1136,14 @@ namespace tardigradeSolverTools{
         return NULL;
     }
 
-    errorOut barrierHomotopySolver( stdFncNLFJ residual, const floatType &dt, const floatVector &x0,
-                                    const intVector &variableIndices, const intVector &residualIndices,
-                                    const intVector &barrierSigns, const floatVector &barrierValues,
-                                    const floatVector &logAMaxValues,
-                                    const floatMatrix &floatArgs, const intMatrix &intArgs,
-                                    const bool &implicitRefine,
-                                    floatVector &x, bool &convergeFlag, bool &fatalErrorFlag,
-                                    floatMatrix &floatOuts, intMatrix &intOuts,
-                                    const unsigned int maxNLIterations, const floatType tolr, const floatType tola,
-                                    const floatType alpha, const unsigned int maxLSIterations, const bool resetOuts ){
+    errorOut barrierHomotopySolver(stdFncNLFJ residual, const floatType &dt, const floatVector &x0,
+                                   const intVector &variableIndices, const intVector &residualIndices,
+                                   const intVector &barrierSigns, const floatVector &barrierValues,
+                                   const floatVector &logAMaxValues, const floatMatrix &floatArgs,
+                                   const intMatrix &intArgs, const bool &implicitRefine, floatVector &x,
+                                   bool &convergeFlag, bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
+                                   const unsigned int maxNLIterations, const floatType tolr, const floatType tola,
+                                   const floatType alpha, const unsigned int maxLSIterations, const bool resetOuts) {
         /*!
          * Perform a non-linear solve using a homotopy method with barriers.
          *
@@ -1197,24 +1183,23 @@ namespace tardigradeSolverTools{
          *     prior to each iteration.
          */
 
-        solverType linearSolver;
+        solverType  linearSolver;
         floatMatrix jacobian;
-        return barrierHomotopySolver( residual, dt, x0, variableIndices, residualIndices, barrierSigns, barrierValues,
-                                      logAMaxValues, floatArgs, intArgs, implicitRefine, x, convergeFlag, fatalErrorFlag,
-                                      floatOuts, intOuts, linearSolver, jacobian,
-                                      maxNLIterations, tolr, tola, alpha, maxLSIterations, resetOuts );
+        return barrierHomotopySolver(residual, dt, x0, variableIndices, residualIndices, barrierSigns, barrierValues,
+                                     logAMaxValues, floatArgs, intArgs, implicitRefine, x, convergeFlag, fatalErrorFlag,
+                                     floatOuts, intOuts, linearSolver, jacobian, maxNLIterations, tolr, tola, alpha,
+                                     maxLSIterations, resetOuts);
     }
 
-    errorOut barrierHomotopySolver( stdFncNLFJ residual, const floatType &dt, const floatVector &x0,
-                                    const intVector &variableIndices, const intVector &residualIndices,
-                                    const intVector &barrierSigns, const floatVector &barrierValues,
-                                    const floatVector &logAMaxValues,
-                                    const floatMatrix &floatArgs, const intMatrix &intArgs,
-                                    const bool &implicitRefine,
-                                    floatVector &x, bool &convergeFlag, bool &fatalErrorFlag,
-                                    floatMatrix &floatOuts, intMatrix &intOuts, solverType &linearSolver, floatMatrix &jacobian,
-                                    const unsigned int maxNLIterations, const floatType tolr, const floatType tola,
-                                    const floatType alpha, const unsigned int maxLSIterations, const bool resetOuts ){
+    errorOut barrierHomotopySolver(stdFncNLFJ residual, const floatType &dt, const floatVector &x0,
+                                   const intVector &variableIndices, const intVector &residualIndices,
+                                   const intVector &barrierSigns, const floatVector &barrierValues,
+                                   const floatVector &logAMaxValues, const floatMatrix &floatArgs,
+                                   const intMatrix &intArgs, const bool &implicitRefine, floatVector &x,
+                                   bool &convergeFlag, bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
+                                   solverType &linearSolver, floatMatrix &jacobian, const unsigned int maxNLIterations,
+                                   const floatType tolr, const floatType tola, const floatType alpha,
+                                   const unsigned int maxLSIterations, const bool resetOuts) {
         /*!
          * Perform a non-linear solve using a homotopy method with barriers.
          *
@@ -1256,150 +1241,147 @@ namespace tardigradeSolverTools{
          *     prior to each iteration.
          */
 
-        //Initialize the pseudo time
+        // Initialize the pseudo time
         floatType pseudoTime = 0.;
 
-        //Initialize the output error
+        // Initialize the output error
         errorOut error;
 
-        //Form argument matrices
-        floatMatrix homotopyFloatArgs( floatArgs.size() + 3 );
-        intMatrix   homotopyIntArgs( intArgs.size() + 3 );
+        // Form argument matrices
+        floatMatrix homotopyFloatArgs(floatArgs.size() + 3);
+        intMatrix   homotopyIntArgs(intArgs.size() + 3);
 
-        homotopyFloatArgs[ 0 ] = { pseudoTime };
-        homotopyFloatArgs[ 1 ] = barrierValues;
-        homotopyFloatArgs[ 2 ] = logAMaxValues;
+        homotopyFloatArgs[0] = {pseudoTime};
+        homotopyFloatArgs[1] = barrierValues;
+        homotopyFloatArgs[2] = logAMaxValues;
 
-        for ( unsigned int i = 0; i < floatArgs.size(); i++ ){
-            homotopyFloatArgs[ 3 + i ] = floatArgs[ i ];
+        for (unsigned int i = 0; i < floatArgs.size(); i++) {
+            homotopyFloatArgs[3 + i] = floatArgs[i];
         }
 
-        homotopyIntArgs[ 0 ] = variableIndices;
-        homotopyIntArgs[ 1 ] = residualIndices;
-        homotopyIntArgs[ 2 ] = barrierSigns;
+        homotopyIntArgs[0] = variableIndices;
+        homotopyIntArgs[1] = residualIndices;
+        homotopyIntArgs[2] = barrierSigns;
 
-        for ( unsigned int i = 0; i < intArgs.size(); i++ ){
-            homotopyIntArgs[ 3 + i ] = intArgs[ i ];
+        for (unsigned int i = 0; i < intArgs.size(); i++) {
+            homotopyIntArgs[3 + i] = intArgs[i];
         }
 
-        //Form output matrices
+        // Form output matrices
         floatMatrix homotopyFloatOuts = floatOuts;
-        intMatrix homotopyIntOuts = intOuts;
+        intMatrix   homotopyIntOuts   = intOuts;
 
-        //Wrap the barrier homotopy function
+        // Wrap the barrier homotopy function
         stdFncNLFJ homotopyResidual;
         homotopyResidual = [&](const floatVector &x_, const floatMatrix &floatArgs_, const intMatrix &intArgs_,
-                               floatVector &r, floatMatrix &J, floatMatrix &fO, intMatrix &iO ){
+                               floatVector &r, floatMatrix &J, floatMatrix &fO, intMatrix &iO) {
+            error = computeBarrierHomotopyResidual(residual, x_, floatArgs_, intArgs_, r, J, fO, iO);
 
-            error = computeBarrierHomotopyResidual( residual, x_, floatArgs_, intArgs_, r, J, fO, iO );
-
-            if ( error ){
-                errorOut result = new errorNode( "barrierHomotopySolver::homotopyResidual", "Error in wrapped barrier homotopy residual function" );
-                result->addNext( error );
+            if (error) {
+                errorOut result = new errorNode("barrierHomotopySolver::homotopyResidual",
+                                                "Error in wrapped barrier homotopy residual function");
+                result->addNext(error);
                 return result;
             }
 
             return static_cast<errorOut>(NULL);
         };
 
-        //Perform solve to initialize x0
+        // Perform solve to initialize x0
 
-        error = newtonRaphson( homotopyResidual, x0, x, convergeFlag, fatalErrorFlag, homotopyFloatOuts, homotopyIntOuts,
-                               homotopyFloatArgs, homotopyIntArgs,
-                               maxNLIterations, tolr, tola, alpha, maxLSIterations, resetOuts
-                             );
+        error = newtonRaphson(homotopyResidual, x0, x, convergeFlag, fatalErrorFlag, homotopyFloatOuts, homotopyIntOuts,
+                              homotopyFloatArgs, homotopyIntArgs, maxNLIterations, tolr, tola, alpha, maxLSIterations,
+                              resetOuts);
 
-        if ( error ){
-            errorOut result = new errorNode( "barrierHomotopySolver", "Error in initial Newton-Raphson solve" );
-            result->addNext( error );
+        if (error) {
+            errorOut result = new errorNode("barrierHomotopySolver", "Error in initial Newton-Raphson solve");
+            result->addNext(error);
             return result;
         }
 
-        //Initialize variables
-        floatVector R, x0_update;
-        floatMatrix J;
+        // Initialize variables
+        floatVector  R, x0_update;
+        floatMatrix  J;
         unsigned int rank;
 
-        while ( pseudoTime < 1.0 ){
-
-            //Reset the additional outputs
+        while (pseudoTime < 1.0) {
+            // Reset the additional outputs
             homotopyFloatOuts = floatOuts;
-            homotopyIntOuts = intOuts;
+            homotopyIntOuts   = intOuts;
 
-            //Update the pseudo time
-            homotopyFloatArgs[ 0 ][ 0 ] = pseudoTime;
+            // Update the pseudo time
+            homotopyFloatArgs[0][0] = pseudoTime;
 
-            //Evaluate the homotopy residual
-            error = computeBarrierHomotopyResidual( residual, x, homotopyFloatArgs, homotopyIntArgs,
-                                                    R, J, homotopyFloatOuts, homotopyIntOuts );
+            // Evaluate the homotopy residual
+            error = computeBarrierHomotopyResidual(residual, x, homotopyFloatArgs, homotopyIntArgs, R, J,
+                                                   homotopyFloatOuts, homotopyIntOuts);
 
-            if ( error ){
-                errorOut result = new errorNode( "barrierHomotopySolver", "Error in computation of homotopy residual" );
-                result->addNext( error );
+            if (error) {
+                errorOut result = new errorNode("barrierHomotopySolver", "Error in computation of homotopy residual");
+                result->addNext(error);
                 return result;
             }
 
-            //Solve for the new dt
+            // Solve for the new dt
             floatType dPT = dt;
-            if ( pseudoTime + dt > 1. ){
-                dPT = ( 1 - pseudoTime );
+            if (pseudoTime + dt > 1.) {
+                dPT = (1 - pseudoTime);
             }
 
-            //Solve for the new dx
-            x -= dPT * tardigradeVectorTools::solveLinearSystem( J, homotopyFloatOuts[ 0 ], rank );
+            // Solve for the new dx
+            x -= dPT * tardigradeVectorTools::solveLinearSystem(J, homotopyFloatOuts[0], rank);
 
-            //Update the pseudo-time
+            // Update the pseudo-time
             pseudoTime += dt;
-            if ( pseudoTime > 1.0 ){
+            if (pseudoTime > 1.0) {
                 pseudoTime = 1.0;
             }
 
-            //Refine answer if required. This runs an implicit solver to solve the
-            //homotopy function which ensures that the derivatives used for the
-            //next pseudo-time step are valid
-            if ( implicitRefine ){
+            // Refine answer if required. This runs an implicit solver to solve the
+            // homotopy function which ensures that the derivatives used for the
+            // next pseudo-time step are valid
+            if (implicitRefine) {
                 homotopyFloatOuts = floatOuts;
-                homotopyIntOuts = intOuts;
+                homotopyIntOuts   = intOuts;
 
-                homotopyFloatArgs[ 0 ][ 0 ] = pseudoTime;
-                x0_update = x;
+                homotopyFloatArgs[0][0] = pseudoTime;
+                x0_update               = x;
 
-                error = newtonRaphson( homotopyResidual, x0_update, x, convergeFlag, fatalErrorFlag,
-                                       homotopyFloatOuts, homotopyIntOuts,
-                                       homotopyFloatArgs, homotopyIntArgs,
-                                       maxNLIterations, tolr, tola, alpha, maxLSIterations, resetOuts
-                                     );
+                error = newtonRaphson(homotopyResidual, x0_update, x, convergeFlag, fatalErrorFlag, homotopyFloatOuts,
+                                      homotopyIntOuts, homotopyFloatArgs, homotopyIntArgs, maxNLIterations, tolr, tola,
+                                      alpha, maxLSIterations, resetOuts);
 
-                if ( error ){
-                    errorOut result = new errorNode( "barrierHomotopySolver", "Error in Newton-Raphson solve during implicit update" );
-                    result->addNext( error );
+                if (error) {
+                    errorOut result =
+                        new errorNode("barrierHomotopySolver", "Error in Newton-Raphson solve during implicit update");
+                    result->addNext(error);
                     return result;
                 }
             }
         }
 
-        //Using the initialized value of x, run a Newton-Raphson solver
+        // Using the initialized value of x, run a Newton-Raphson solver
         x0_update = x;
-        error = newtonRaphson( residual, x0_update, x, convergeFlag, fatalErrorFlag, floatOuts, intOuts,
-                               floatArgs, intArgs, linearSolver, jacobian,
-                               maxNLIterations, tolr, tola, alpha, maxLSIterations, resetOuts );
+        error =
+            newtonRaphson(residual, x0_update, x, convergeFlag, fatalErrorFlag, floatOuts, intOuts, floatArgs, intArgs,
+                          linearSolver, jacobian, maxNLIterations, tolr, tola, alpha, maxLSIterations, resetOuts);
 
-        if ( error ){
-            errorOut result = new errorNode( "barrierHomotopySolver",
-                                             "Error in the final Newton-Raphson solution of the barrier homotopy solver" );
-            result->addNext( error );
+        if (error) {
+            errorOut result =
+                new errorNode("barrierHomotopySolver",
+                              "Error in the final Newton-Raphson solution of the barrier homotopy solver");
+            result->addNext(error);
             return result;
         }
 
         return NULL;
     }
 
-    errorOut BFGS( stdFncLagrangianG lagrangianGradientFunction, const floatVector &x0,
-                   floatVector &x, bool &convergeFlag, bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
-                   const floatMatrix &floatArgs, const intMatrix &intArgs,
-                   const unsigned int maxNLIterations, const floatType tolr, const floatType tola,
-                   const floatType alpha, const unsigned int maxLSIterations, const bool resetOuts,
-                   const floatType stepSize, const floatType maxdx ){
+    errorOut BFGS(stdFncLagrangianG lagrangianGradientFunction, const floatVector &x0, floatVector &x,
+                  bool &convergeFlag, bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
+                  const floatMatrix &floatArgs, const intMatrix &intArgs, const unsigned int maxNLIterations,
+                  const floatType tolr, const floatType tola, const floatType alpha, const unsigned int maxLSIterations,
+                  const bool resetOuts, const floatType stepSize, const floatType maxdx) {
         /*!
          * An implementation of the Broyden–Fletcher–Goldfarb–Shanno (BFGS) algorithm for solving optimization problems.
          *
@@ -1424,132 +1406,131 @@ namespace tardigradeSolverTools{
          *     vector. If negative this is ignored.
          */
 
-        //Solve for the initial gradient of the Lagrangian
-        floatType lagrangian_k, lagrangian_kp1;
+        // Solve for the initial gradient of the Lagrangian
+        floatType   lagrangian_k, lagrangian_kp1;
         floatVector lagrangianGradient_k, lagrangianGradient_kp1;
 
         floatMatrix floatOuts0;
-        intMatrix intOuts0;
+        intMatrix   intOuts0;
 
-        if ( resetOuts ){
+        if (resetOuts) {
             floatOuts0 = floatOuts;
-            intOuts0 = intOuts;
+            intOuts0   = intOuts;
         }
 
-        errorOut error = lagrangianGradientFunction( x0, floatArgs, intArgs, lagrangian_kp1, lagrangianGradient_kp1,
-                                                     floatOuts, intOuts );
+        errorOut error = lagrangianGradientFunction(x0, floatArgs, intArgs, lagrangian_kp1, lagrangianGradient_kp1,
+                                                    floatOuts, intOuts);
 
-        if ( error ){
-            errorOut result = new errorNode( "BFGS", "Error in computation of the Lagrangian Gradient" );
-            result->addNext( error );
-            convergeFlag = false;
+        if (error) {
+            errorOut result = new errorNode("BFGS", "Error in computation of the Lagrangian Gradient");
+            result->addNext(error);
+            convergeFlag   = false;
             fatalErrorFlag = true;
             return result;
         }
 
-        //Set the initial iterate of the hessian
-        floatMatrix B = ( tardigradeVectorTools::l2norm( lagrangianGradient_kp1 ) / stepSize ) * tardigradeVectorTools::eye< floatType >( lagrangianGradient_kp1.size() );
+        // Set the initial iterate of the hessian
+        floatMatrix B = (tardigradeVectorTools::l2norm(lagrangianGradient_kp1) / stepSize) *
+                        tardigradeVectorTools::eye<floatType>(lagrangianGradient_kp1.size());
 
-        //Set the tolerance for each value individually
-        floatVector tol = floatVector( lagrangianGradient_kp1.size(), 0 );
-        for ( unsigned int i = 0; i < lagrangianGradient_kp1.size(); i++ ){
-            tol[ i ] = tolr * fabs( lagrangianGradient_kp1[ i ] ) + tola;
+        // Set the tolerance for each value individually
+        floatVector tol = floatVector(lagrangianGradient_kp1.size(), 0);
+        for (unsigned int i = 0; i < lagrangianGradient_kp1.size(); i++) {
+            tol[i] = tolr * fabs(lagrangianGradient_kp1[i]) + tola;
         }
 
-        //Check if convergence has been achieved
+        // Check if convergence has been achieved
         bool converged;
-        error = checkTolerance( lagrangianGradient_kp1, tol, converged );
+        error = checkTolerance(lagrangianGradient_kp1, tol, converged);
 
-        if ( error ){
-            errorOut result = new errorNode( "BFGS", "Error in tolerence check" );
-            result->addNext( error );
+        if (error) {
+            errorOut result = new errorNode("BFGS", "Error in tolerence check");
+            result->addNext(error);
             fatalErrorFlag = true;
             return result;
         }
 
-        //Copy lagrangianGradient_kp1 to lagrangianGradient_p
-        lagrangian_k = lagrangian_kp1;
+        // Copy lagrangianGradient_kp1 to lagrangianGradient_p
+        lagrangian_k         = lagrangian_kp1;
         lagrangianGradient_k = lagrangianGradient_kp1;
 
-        //Initialize the iteration
-        floatType theta;
-        floatType pNorm;
+        // Initialize the iteration
+        floatType   theta;
+        floatType   pNorm;
         floatVector r, p, s, y, Bs;
-        floatType ys;
-        floatType sBs;
+        floatType   ys;
+        floatType   sBs;
 
         floatMatrix floatOuts_k;
-        intMatrix intOuts_k;
+        intMatrix   intOuts_k;
 
         x = x0;
 
         unsigned int niter = 0;
         unsigned int nLSIterations;
-        //Begin the iteration loop
-        while ( ( !converged ) && ( niter < maxNLIterations ) ){
-
-            //Compute the direction
+        // Begin the iteration loop
+        while ((!converged) && (niter < maxNLIterations)) {
+            // Compute the direction
             unsigned int rank;
-            p = -tardigradeVectorTools::solveLinearSystem( B, lagrangianGradient_k, rank );
-            pNorm = tardigradeVectorTools::l2norm( p );
+            p     = -tardigradeVectorTools::solveLinearSystem(B, lagrangianGradient_k, rank);
+            pNorm = tardigradeVectorTools::l2norm(p);
 
-            //Apply maximum dx step size limitation
-            if ( ( maxdx > 0 ) && ( pNorm > maxdx ) ){
-                p *= ( maxdx / pNorm );
+            // Apply maximum dx step size limitation
+            if ((maxdx > 0) && (pNorm > maxdx)) {
+                p *= (maxdx / pNorm);
             }
 
-            if ( rank < lagrangianGradient_k.size() ){
-                convergeFlag = false;
+            if (rank < lagrangianGradient_k.size()) {
+                convergeFlag   = false;
                 fatalErrorFlag = false;
-                return new errorNode( "BFGS", "The approximate Hessian is singular" );
+                return new errorNode("BFGS", "The approximate Hessian is singular");
             }
 
-            if ( resetOuts ){
+            if (resetOuts) {
                 floatOuts = floatOuts0;
-                intOuts = intOuts0;
+                intOuts   = intOuts0;
             }
 
-            //Save the current value of the outputs
-            if ( resetOuts ){
+            // Save the current value of the outputs
+            if (resetOuts) {
                 floatOuts_k = floatOuts0;
-                intOuts_k = intOuts0;
-                floatOuts = floatOuts0;
-                intOuts = intOuts0;
+                intOuts_k   = intOuts0;
+                floatOuts   = floatOuts0;
+                intOuts     = intOuts0;
 
-            }
-            else{
+            } else {
                 floatOuts_k = floatOuts;
-                intOuts_k = intOuts;
+                intOuts_k   = intOuts;
             }
 
-            error = lagrangianGradientFunction( x + p, floatArgs, intArgs, lagrangian_kp1, lagrangianGradient_kp1,
-                                                floatOuts, intOuts );
+            error = lagrangianGradientFunction(x + p, floatArgs, intArgs, lagrangian_kp1, lagrangianGradient_kp1,
+                                               floatOuts, intOuts);
 
-            if ( error ){
-                errorOut result = new errorNode( "BFGS", "Error in computation of the Lagrangian gradient function" );
-                result->addNext( error );
+            if (error) {
+                errorOut result = new errorNode("BFGS", "Error in computation of the Lagrangian gradient function");
+                result->addNext(error);
                 fatalErrorFlag = true;
                 return result;
             }
 
-            //Begin the line search
+            // Begin the line search
             floatType lambda = 1;
-            nLSIterations = 0;
+            nLSIterations    = 0;
 
-            while ( ( lagrangian_kp1 > ( 1 - alpha ) * lagrangian_k ) && ( nLSIterations < maxLSIterations ) ){
-
-                //Reduce the LS step-size
+            while ((lagrangian_kp1 > (1 - alpha) * lagrangian_k) && (nLSIterations < maxLSIterations)) {
+                // Reduce the LS step-size
                 lambda *= 0.5;
 
                 floatOuts = floatOuts_k;
-                intOuts = intOuts_k;
+                intOuts   = intOuts_k;
 
-                error = lagrangianGradientFunction( x + lambda * p, floatArgs, intArgs, lagrangian_kp1, lagrangianGradient_kp1,
-                                                    floatOuts, intOuts );
+                error = lagrangianGradientFunction(x + lambda * p, floatArgs, intArgs, lagrangian_kp1,
+                                                   lagrangianGradient_kp1, floatOuts, intOuts);
 
-                if ( error ){
-                    errorOut result = new errorNode( "BFGS", "Error in the computation of the Lagrangian gradient function of the line search" );
-                    result->addNext( error );
+                if (error) {
+                    errorOut result = new errorNode(
+                        "BFGS", "Error in the computation of the Lagrangian gradient function of the line search");
+                    result->addNext(error);
                     fatalErrorFlag = true;
                     return result;
                 }
@@ -1557,75 +1538,72 @@ namespace tardigradeSolverTools{
                 nLSIterations++;
             }
 
-            if ( lagrangian_kp1 > ( 1 - alpha ) * lagrangian_k ){
-                convergeFlag = false;
+            if (lagrangian_kp1 > (1 - alpha) * lagrangian_k) {
+                convergeFlag   = false;
                 fatalErrorFlag = false;
-                return new errorNode( "BFGS", "Line search did not converge" );
-            }
-            else{
+                return new errorNode("BFGS", "Line search did not converge");
+            } else {
+                // Continue with BFGS update
 
-                //Continue with BFGS update
-
-                //Compute s
+                // Compute s
                 s = lambda * p;
 
-                //Update x
+                // Update x
                 x += s;
 
-                //Compute y
+                // Compute y
                 y = lagrangianGradient_kp1 - lagrangianGradient_k;
 
-                //Compute the damping factor
+                // Compute the damping factor
                 theta = 1.;
 
-                //Update the approximation of the hessian
-                ys = tardigradeVectorTools::dot( y, s );
-                Bs = tardigradeVectorTools::dot( B, s );
-                sBs = tardigradeVectorTools::dot( s, Bs );
+                // Update the approximation of the hessian
+                ys  = tardigradeVectorTools::dot(y, s);
+                Bs  = tardigradeVectorTools::dot(B, s);
+                sBs = tardigradeVectorTools::dot(s, Bs);
 
-                if ( ys < 0.2 * sBs ){
-                    theta = 0.8 * sBs / ( sBs - ys );
+                if (ys < 0.2 * sBs) {
+                    theta = 0.8 * sBs / (sBs - ys);
                 }
 
-                r = theta * y  + ( 1 - theta ) * Bs;
+                r = theta * y + (1 - theta) * Bs;
 
-                B += tardigradeVectorTools::dyadic( r, r ) / tardigradeVectorTools::dot( s, r )
-                   - tardigradeVectorTools::dyadic( Bs, Bs ) / tardigradeVectorTools::dot( s, Bs );
+                B += tardigradeVectorTools::dyadic(r, r) / tardigradeVectorTools::dot(s, r) -
+                     tardigradeVectorTools::dyadic(Bs, Bs) / tardigradeVectorTools::dot(s, Bs);
 
-                //Update the previous values
-                lagrangian_k = lagrangian_kp1;
+                // Update the previous values
+                lagrangian_k         = lagrangian_kp1;
                 lagrangianGradient_k = lagrangianGradient_kp1;
 
-                //Check the convergence tolerence
-                error = checkTolerance( lagrangianGradient_kp1, tol, converged );
+                // Check the convergence tolerence
+                error = checkTolerance(lagrangianGradient_kp1, tol, converged);
 
-                if ( error ){
-                    errorOut result = new errorNode( "BFGS", "Error in the tolerence check at end of iteration" );
-                    result->addNext( error );
+                if (error) {
+                    errorOut result = new errorNode("BFGS", "Error in the tolerence check at end of iteration");
+                    result->addNext(error);
                     return result;
                 }
             }
         }
 
-        if ( converged ){
-            convergeFlag = true;
+        if (converged) {
+            convergeFlag   = true;
             fatalErrorFlag = false;
             return NULL;
-        }
-        else{
-            convergeFlag = false;
+        } else {
+            convergeFlag   = false;
             fatalErrorFlag = false;
 
-            return new errorNode( "BFGS", "BFGS did not converge" );
+            return new errorNode("BFGS", "BFGS did not converge");
         }
     }
 
-    errorOut homotopyBFGS( stdFncLagrangianG lagrangianGradientFunction, const floatVector &x0,
-                           floatVector &x, bool &convergeFlag, bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
-                           const floatMatrix &floatArgs, const intMatrix &intArgs,
-                           const unsigned int maxNLIterations, const floatType tolr, const floatType tola,
-                           const floatType alpha, const unsigned int maxLSIterations, const floatType ds0,
-                           const floatType dsMin, const bool resetOuts, const floatType maxdx ){
+    errorOut homotopyBFGS(stdFncLagrangianG lagrangianGradientFunction, const floatVector &x0, floatVector &x,
+                          bool &convergeFlag, bool &fatalErrorFlag, floatMatrix &floatOuts, intMatrix &intOuts,
+                          const floatMatrix &floatArgs, const intMatrix &intArgs, const unsigned int maxNLIterations,
+                          const floatType tolr, const floatType tola, const floatType alpha,
+                          const unsigned int maxLSIterations, const floatType ds0, const floatType dsMin,
+                          const bool resetOuts, const floatType maxdx) {
         /*!
          * Optimize a non-linear equation using a homotopy BFGS method. This method
          * can be successful in solving very stiff equations which other techniques
@@ -1633,8 +1611,8 @@ namespace tardigradeSolverTools{
          * of easier to solve equations which will eventually converge to the
          * more difficult problem.
          *
-         * \warning \emoji :warning: \emoji :warning: \emoji :warning: \b WARNING \emoji :warning: \emoji :warning: \emoji :warning:
-         *     WARNING: This function is less tested than would be desired and should be used with caution.
+         * \warning \emoji :warning: \emoji :warning: \emoji :warning: \b WARNING \emoji :warning: \emoji :warning:
+         * \emoji :warning: WARNING: This function is less tested than would be desired and should be used with caution.
          *
          * The main routine accepts the following parameters:
          * \param lagrangianGradientFunction: The lagrangian function to optimize which also computes the gradient
@@ -1658,85 +1636,81 @@ namespace tardigradeSolverTools{
          * \param maxdx: The maximum allowable change in the solution vector. If negative this is ignored.
          */
 
-        //Initialize the homotopy solver
-        floatType ds = ds0;
-        floatType s  = 0;
+        // Initialize the homotopy solver
+        floatType   ds = ds0;
+        floatType   s  = 0;
         floatVector xh = x0;
 
-        //Save the floatOuts and intOuts
+        // Save the floatOuts and intOuts
         floatMatrix oldFloatOuts = floatOuts;
         intMatrix   oldIntOuts   = intOuts;
 
-        //Initialize the error output
+        // Initialize the error output
         errorOut error;
 
-
-        //Define the homotopy residual
+        // Define the homotopy residual
         stdFncLagrangianG homotopyLagrangianGradient;
-        homotopyLagrangianGradient = [&]( const floatVector &x_, const floatMatrix &floatArgs_, const intMatrix &intArgs_,
-                                          floatType &l, floatVector &dldx, floatMatrix &fO, intMatrix &iO ){
-
-            floatType L;
+        homotopyLagrangianGradient = [&](const floatVector &x_, const floatMatrix &floatArgs_,
+                                         const intMatrix &intArgs_, floatType &l, floatVector &dldx, floatMatrix &fO,
+                                         intMatrix &iO) {
+            floatType   L;
             floatVector dLdx;
 
-            error = lagrangianGradientFunction( x_, floatArgs_, intArgs_, L, dLdx, fO, iO );
+            error = lagrangianGradientFunction(x_, floatArgs_, intArgs_, L, dLdx, fO, iO);
 
-            if (error){
-                errorOut result = new errorNode("homotopyBFGS::homotopyLagrangianGradient", "error in lagrangian gradient calculation");
+            if (error) {
+                errorOut result = new errorNode("homotopyBFGS::homotopyLagrangianGradient",
+                                                "error in lagrangian gradient calculation");
                 result->addNext(error);
                 return result;
             }
 
-            l = 0.5 * ( 1 - s ) * tardigradeVectorTools::dot( x_ - x0, x_ - x0 ) + s * L;
-            dldx = ( 1 - s ) * ( x_ - x0 ) + s * dLdx;
+            l    = 0.5 * (1 - s) * tardigradeVectorTools::dot(x_ - x0, x_ - x0) + s * L;
+            dldx = (1 - s) * (x_ - x0) + s * dLdx;
 
             return static_cast<errorOut>(NULL);
         };
 
-        //Begin the homotopy loop
-        while ( s < 1 ){
-            //Update s
+        // Begin the homotopy loop
+        while (s < 1) {
+            // Update s
             s += ds;
-            s = std::min( s, 1. );
+            s = std::min(s, 1.);
 
-            //Initialize the solver
+            // Initialize the solver
             convergeFlag = false;
 
-            if ( !resetOuts ){
+            if (!resetOuts) {
                 oldFloatOuts = floatOuts;
                 oldIntOuts   = intOuts;
-            }
-            else{
+            } else {
                 floatOuts = oldFloatOuts;
-                intOuts = oldIntOuts;
+                intOuts   = oldIntOuts;
             }
 
-            //Begin the adaptive homotopy loop
-            while ( !convergeFlag ){
+            // Begin the adaptive homotopy loop
+            while (!convergeFlag) {
+                error = BFGS(homotopyLagrangianGradient, xh, x, convergeFlag, fatalErrorFlag, floatOuts, intOuts,
+                             floatArgs, intArgs, maxNLIterations, tolr, tola, alpha, maxLSIterations, resetOuts, maxdx);
 
-                error = BFGS( homotopyLagrangianGradient, xh, x, convergeFlag, fatalErrorFlag, floatOuts, intOuts,
-                              floatArgs, intArgs,
-                              maxNLIterations, tolr, tola,
-                              alpha, maxLSIterations, resetOuts, maxdx );
-
-                if ( fatalErrorFlag ){
-                    errorOut result = new errorNode( "homotopyBFGS", "Fatal error in Newton Raphson solution" );
-                    result->addNext( error );
+                if (fatalErrorFlag) {
+                    errorOut result = new errorNode("homotopyBFGS", "Fatal error in Newton Raphson solution");
+                    result->addNext(error);
                     return result;
                 }
 
-                else if ( ( !convergeFlag ) && ( ds / 2 > dsMin ) ){
+                else if ((!convergeFlag) && (ds / 2 > dsMin)) {
                     s -= ds;
-                    ds = std::max( ds / 2, dsMin );
+                    ds = std::max(ds / 2, dsMin);
                     s += ds;
 
                     floatOuts = oldFloatOuts;
                     intOuts   = oldIntOuts;
                 }
 
-                else if ( ( !convergeFlag ) && ( ds / 2 < dsMin ) ){
-                    errorOut result = new errorNode( "homotopyBFGS", "Homotopy solver did not converge" );
-                    result->addNext( error );
+                else if ((!convergeFlag) && (ds / 2 < dsMin)) {
+                    errorOut result = new errorNode("homotopyBFGS", "Homotopy solver did not converge");
+                    result->addNext(error);
                     return result;
                 }
             }
@@ -1744,8 +1718,8 @@ namespace tardigradeSolverTools{
             xh = x;
         }
 
-        //Solver completed successfully
+        // Solver completed successfully
         return NULL;
     }
 
-}
+}  // namespace tardigradeSolverTools
