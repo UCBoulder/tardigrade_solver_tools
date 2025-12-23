@@ -69,8 +69,8 @@ errorOut nlFxn1(const floatVector &x, const floatMatrix &floatArgs, const intMat
      * \param &intOuts: Additional integer outputs.
      */
 
-    if ( x.size( ) != 2 ){
-        return new errorNode( "nlFnx1", "x must have a size of 2" );
+    if (x.size() != 2) {
+        return new errorNode("nlFnx1", "x must have a size of 2");
     }
 
     floatType x0 = -1;
@@ -135,8 +135,8 @@ errorOut nlFxn2(const floatVector &x, const floatMatrix &floatArgs, const intMat
      * \param &intOuts: Additional integer outputs.
      */
 
-    if ( x.size( ) != 3 ){
-        return new errorNode( "nlFxn2", "x must have a size of 3" );
+    if (x.size() != 3) {
+        return new errorNode("nlFxn2", "x must have a size of 3");
     }
 
     residual = {(x[0] - 1) * (x[0] - 7) * x[1], (x[1] - 1) * (x[0] - 3) * x[2], x[0] * x[1] * x[2]};

@@ -1715,10 +1715,9 @@ namespace tardigradeSolverTools {
                     intOuts   = oldIntOuts;
                 }
 
-                else{
+                else {
                     delete error;
                 }
-
             }
 
             xh = x;
