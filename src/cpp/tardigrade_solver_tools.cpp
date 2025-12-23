@@ -1646,7 +1646,7 @@ namespace tardigradeSolverTools {
         intMatrix   oldIntOuts   = intOuts;
 
         // Initialize the error output
-        errorOut error;
+        errorOut fxn_error, error;
 
         // Define the homotopy residual
         stdFncLagrangianG homotopyLagrangianGradient;
@@ -1656,12 +1656,12 @@ namespace tardigradeSolverTools {
             floatType   L;
             floatVector dLdx;
 
-            error = lagrangianGradientFunction(x_, floatArgs_, intArgs_, L, dLdx, fO, iO);
+            fxn_error = lagrangianGradientFunction(x_, floatArgs_, intArgs_, L, dLdx, fO, iO);
 
-            if (error) {
+            if (fxn_error) {
                 errorOut result = new errorNode("homotopyBFGS::homotopyLagrangianGradient",
                                                 "error in lagrangian gradient calculation");
-                result->addNext(error);
+                result->addNext(fxn_error);
                 return result;
             }
 
@@ -1699,7 +1699,14 @@ namespace tardigradeSolverTools {
                     return result;
                 }
 
-                else if ((!convergeFlag) && (ds / 2 > dsMin)) {
+                else if ((!convergeFlag) && (ds / 2 < dsMin)) {
+                    errorOut result = new errorNode("homotopyBFGS", "Homotopy solver did not converge");
+                    result->addNext(error);
+                    return result;
+                }
+
+                else if (!convergeFlag) {
+                    delete error;
                     s -= ds;
                     ds = std::max(ds / 2, dsMin);
                     s += ds;
@@ -1708,11 +1715,10 @@ namespace tardigradeSolverTools {
                     intOuts   = oldIntOuts;
                 }
 
-                else if ((!convergeFlag) && (ds / 2 < dsMin)) {
-                    errorOut result = new errorNode("homotopyBFGS", "Homotopy solver did not converge");
-                    result->addNext(error);
-                    return result;
+                else{
+                    delete error;
                 }
+
             }
 
             xh = x;

@@ -69,6 +69,10 @@ errorOut nlFxn1(const floatVector &x, const floatMatrix &floatArgs, const intMat
      * \param &intOuts: Additional integer outputs.
      */
 
+    if ( x.size( ) != 2 ){
+        return new errorNode( "nlFnx1", "x must have a size of 2" );
+    }
+
     floatType x0 = -1;
     floatType y0 = 5.6;
 
@@ -130,6 +134,10 @@ errorOut nlFxn2(const floatVector &x, const floatMatrix &floatArgs, const intMat
      * \param &floatOuts: Additional floating point outputs.
      * \param &intOuts: Additional integer outputs.
      */
+
+    if ( x.size( ) != 3 ){
+        return new errorNode( "nlFxn2", "x must have a size of 3" );
+    }
 
     residual = {(x[0] - 1) * (x[0] - 7) * x[1], (x[1] - 1) * (x[0] - 3) * x[2], x[0] * x[1] * x[2]};
     jacobian = {
@@ -806,6 +814,7 @@ BOOST_AUTO_TEST_CASE(testFiniteDifference, *boost::unit_test::tolerance(DEFAULT_
     errorOut    error2 = nlFxn1(x0, {}, {}, Rtmp, result, floatOuts, intOuts);
 
     BOOST_TEST(!error2);
+    delete error2;
 
     BOOST_TEST(tardigradeVectorTools::appendVectors(J) == tardigradeVectorTools::appendVectors(result),
                CHECK_PER_ELEMENT);
@@ -822,6 +831,7 @@ BOOST_AUTO_TEST_CASE(testFiniteDifference, *boost::unit_test::tolerance(DEFAULT_
     errorOut error4 = nlFxn2(x0, {}, {}, Rtmp, result, floatOuts, intOuts);
 
     BOOST_TEST(!error4);
+    delete error4;
 
     BOOST_TEST(tardigradeVectorTools::appendVectors(J) == tardigradeVectorTools::appendVectors(result),
                CHECK_PER_ELEMENT);
@@ -1479,6 +1489,7 @@ BOOST_AUTO_TEST_CASE(test_barrierHomotopySolver, *boost::unit_test::tolerance(DE
     error = func(result, floatArgs, intArgs, residualResult, jacobianResult, floatOuts, intOuts);
 
     BOOST_CHECK(!error);
+    delete error;
 
     BOOST_TEST(tardigradeVectorTools::appendVectors(jacobian) == tardigradeVectorTools::appendVectors(jacobianResult),
                CHECK_PER_ELEMENT);
