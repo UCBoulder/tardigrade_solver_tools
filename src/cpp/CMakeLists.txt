@@ -1,8 +1,5 @@
 add_library(${PROJECT_NAME} SHARED "${PROJECT_NAME}.cpp" "${PROJECT_NAME}.h")
-set_target_properties(
-    ${PROJECT_NAME}
-    PROPERTIES PUBLIC_HEADER ${PROJECT_NAME}.h
-)
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER ${PROJECT_NAME}.h)
 target_link_libraries(${PROJECT_NAME} tardigrade_error_tools)
 target_compile_options(${PROJECT_NAME} PUBLIC)
 
@@ -10,9 +7,7 @@ target_compile_options(${PROJECT_NAME} PUBLIC)
 if(NOT cmake_build_type_lower STREQUAL "release")
     target_include_directories(
         ${PROJECT_NAME}
-        PUBLIC
-            "${tardigrade_error_tools_SOURCE_DIR}/src/cpp"
-            "${tardigrade_vector_tools_SOURCE_DIR}/src/cpp"
+        PUBLIC "${tardigrade_error_tools_SOURCE_DIR}/src/cpp" "${tardigrade_vector_tools_SOURCE_DIR}/src/cpp"
     )
 endif()
 
@@ -27,10 +22,5 @@ install(
 
 get_target_property(target_sources ${PROJECT_NAME} SOURCES)
 foreach(source ${target_sources})
-    set_property(
-        GLOBAL
-        APPEND
-        PROPERTY
-            CLANG_FORMAT_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${source}"
-    )
+    set_property(GLOBAL APPEND PROPERTY CLANG_FORMAT_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${source}")
 endforeach(source)
