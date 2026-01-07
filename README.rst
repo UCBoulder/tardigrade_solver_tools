@@ -219,9 +219,9 @@ doubt use ``feature/<description>``.
 reStructured Text
 =================
 
-[Sphinx](https://www.sphinx-doc.org/en/master/) reads in docstrings and other special portions of the code as
-reStructured text. Developers should follow styles in this [Sphinx style
-guide](https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#).
+`Sphinx`_ reads in docstrings and other special portions of the code as
+reStructured text. Developers should follow styles in this `Sphinx style guide
+<https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#>`_.
 
 Style Guide
 ===========
