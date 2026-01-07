@@ -66,10 +66,9 @@ test:
     - src/cpp/tests/CMakeLists.txt
     - src/cpp/tests/test_tardigrade_solver_tools.cpp
   commands:
-    - mkdir build-tests
-    - cd build-tests
-    - cmake .. -DCMAKE_BUILD_TYPE=conda-test -DCMAKE_INSTALL_LIBDIR=lib
-    - cmake --build . --target all --verbose --parallel 4
+    - set -x
+    - cmake -S . -B build -DCMAKE_BUILD_TYPE=conda-test -DCMAKE_INSTALL_LIBDIR=lib
+    - cmake --build build --target all --verbose --parallel 4
     - ctest --test-dir build --output-on-failure -R 'test_' --parallel 4
 
 about:
