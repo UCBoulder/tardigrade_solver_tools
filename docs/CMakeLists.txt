@@ -43,18 +43,12 @@ set(SPHINX_OUT ${CMAKE_CURRENT_BINARY_DIR}/sphinx/conf.py)
 configure_file(${SPHINX_IN} ${SPHINX_OUT} @ONLY)
 
 # Explicit list of documentation source files because globbing won't trigger CMake config on re-builds
-set(DOCUMENTATION_SOURCE
-    ${CMAKE_CURRENT_SOURCE_DIR}/index.rst
-    ${CMAKE_CURRENT_SOURCE_DIR}/api.rst
-)
+set(DOCUMENTATION_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/index.rst ${CMAKE_CURRENT_SOURCE_DIR}/api.rst)
 
 # Add sphinx command
 add_custom_command(
     OUTPUT ${SPHINX_INDEX_FILE}
-    COMMAND
-        ${CMAKE_COMMAND} -E copy
-        ${CMAKE_CURRENT_SOURCE_DIRECTORY}/${DOCUMENTATION_SOURCE}
-        ${SPHINX_BUILD}
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIRECTORY}/${DOCUMENTATION_SOURCE} ${SPHINX_BUILD}
     COMMAND
         ${SPHINX_EXECUTABLE} -M html ${SPHINX_BUILD} ${SPHINX_BUILD}
         # Tell Breathe where to find the Doxygen output

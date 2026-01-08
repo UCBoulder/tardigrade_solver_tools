@@ -1,29 +1,17 @@
 .. targets-start-do-not-remove
 
-.. _Anaconda Documentation: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
-.. _BOOST: https://www.boost.org/doc/libs/1_53_0/
-.. _CMake: https://cmake.org/cmake/help/v3.14/
-.. _CMake add_custom_target: https://cmake.org/cmake/help/latest/command/add_custom_target.html
 .. _Doxygen: https://www.doxygen.nl/manual/docblocks.html
-.. _Eigen: https://eigen.tuxfamily.org/dox/
 .. _Sphinx: https://www.sphinx-doc.org/en/master/
-.. _Breathe: https://breathe.readthedocs.io/en/latest/
 .. _PEP-8: https://www.python.org/dev/peps/pep-0008/
-.. _pipreqs: https://github.com/bndr/pipreqs 
-.. _LaTeX: https://www.latex-project.org/help/documentation/
-.. _W-13 DevOps Manual: https://xcp-confluence.lanl.gov/display/COM/W-13+DevOps
-.. _upstream repository: https://re-git.lanl.gov/aea/material-models/tardigrade_micromorphic_tools
-.. _Material Models: https://re-git.lanl.gov/aea/material-models
-.. _UNIX group: https://ddw-confluence.lanl.gov/pages/viewpage.action?pageId=150929410
 .. _`gersemi`: https://github.com/BlankSpruce/gersemi
 .. _`clang-tidy`: https://clang.llvm.org/extra/clang-tidy/
 .. _`clang-format`: https://clang.llvm.org/docs/ClangFormat.html
 
 .. targets-end-do-not-remove
 
-#############
-solver\_tools
-#############
+#########################
+tardigrade\_solver\_tools
+#########################
 
 *******************
 Project Description
@@ -34,13 +22,10 @@ Tools for performing solves of nonlinear equations.
 Information
 ===========
 
-* Documentation: https://aea.re-pages.lanl.gov/material-models/tardigrade_solver_tools
-* Wiki: https://re-git.lanl.gov/aea/material-models/tardigrade_solver_tools/-/wikis/home
-
 Developers
 ==========
 
-* Nathan Miller nathanm@lanl.gov
+* Nathan Miller Nathan.A.Miller@colorado.edu
 * Kyle Brindley kbrindley@lanl.gov
 
 ************
@@ -50,121 +35,93 @@ Dependencies
 Compilers
 =========
 
-* c++11 compiler (listed version number has been tested at some point)
+The developer dependencies are found in ``environment.txt``.
 
-  * g++ >= GNU 4.8.5
+.. code-block:: bash
 
-Executables
-===========
+   $ conda create --name tardigrade_solver_tools-dev --file environment.txt
 
-* [CMake](https://cmake.org/cmake/help/v3.14/) >= 3.14
-* [Doxygen](https://www.doxygen.nl/manual/docblocks.html) >= 1.8.5
-* [LaTeX](https://www.latex-project.org/help/documentation/) >= 2017
+**************************
+Building the documentation
+**************************
 
-Python Modules (for documentation)
-==================================
+.. warning::
 
-For convenience, the minimal Python environment requirements for the
-documentation build are included in ``configuration_files/environment.yaml``.
-This file was created from the [pipreqs](https://github.com/bndr/pipreqs)
-command line tool and Sphinx configuration inspection, e.g. the extension
-packages.
+   **API Health Note**: The Sphinx API docs are a work-in-progress. The doxygen
+   API is much more useful
 
 .. code-block:: bash
 
    $ pwd
-   path/to/tardigrade_vector_tools/
-   $ pipreqs --use-local --print --no-pin .
+   /path/to/tardigrade_solver_tools
+   $ cmake -S . -B build
+   $ cmake --build build --target Doxygen Sphinx
 
-A minimal anaconda environment for building the documentation can be created
-from an existing anaconda installation with the following commands.
+*****************
+Build the library
+*****************
 
-.. code-block:: bash
-
-   $ conda env create --file configuration_files/environment.yaml
-
-You can learn more about Anaconda Python environment creation and management in
-the [Anaconda
-Documentation](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html)
-
-C++ Libraries
-=============
-
-.. note::
-
-   **Non-admin installations for Eigen and Boost are no longer required.** This project is built and deployed against
-   C++ libraries managed in Conda. See the Conda environment file and README discussion for non-admin environment
-   management.
-
-* [Eigen](https://eigen.tuxfamily.org/dox/) >= 3.3.7
-* [BOOST](https://www.boost.org/doc/libs/1_53_0/) >= 1.53.0
-* error\_tools: https://re-git.lanl.gov/aea/material-models/tardigrade_error_tools
-* vector\_tools: https://re-git.lanl.gov/aea/material-models/tardigrade_vector_tools
-
-If not found on the current system or active Conda environment, all of the
-``*_tools`` libraries are pulled from their git repos by branch name and built
-with their respective cmake files as part of the cmake build for this project.
-
-**************
-Build and Test
-**************
-
-This project is built with [CMake](https://cmake.org/cmake/help/v3.14/) and uses
-[Sphinx](https://www.sphinx-doc.org/en/master/) to build the documentation with
-[Doxygen](https://www.doxygen.nl/manual/docblocks.html) +
-[Breathe](https://breathe.readthedocs.io/en/latest/) for the c++ API.
-
-.. warning::
-
-   **API Health Note**: The sphinx API docs are a work-in-progress. The doxygen
-   API is much more useful
-
-A build script has been created for convenience, ``new_build.sh``. It will build
-everything including the library binary, the test binary, and the documentation.
-This is the same build script used by ``jenkins_build.sh`` for CI builds and
-testing.
-
-sstelmo
-=======
-
-1) Activate a [W-13 Python Environment](https://xcp-confluence.lanl.gov/display/PYT/The+W-13+Python+3+environment)
-
-   .. code-block:: bash
-
-      $ module load python/2020.07-python-3.8
-      $ sv3r
-
-2) Build everything
+1) Build just the library
 
    .. code-block:: bash
 
       $ pwd
-      /path/to/tardigrade_solver_tools/
+      /path/to/tardigrade_solver_tools
+      $ cmake -S . -B build
+      $ cmake --build build --target tardigrade_solver_tools
 
-      # Just perform the build. Usage arguments are "cmake_build_type"
-      ./new_build.sh None
+****************
+Test the library
+****************
 
-      # Build and perform tests
-      ./jenkins_build.sh
+.. code-block:: back
 
-3) View test results
+   $ pwd
+   /path/to/tardigrade_solver_tools
+   $ cmake -S . -B build
+   $ cmake --build build --target tardigrade_solver_tools test_tardigrade_solver_tools
+   $ ctest --test-dir build
+
+*******************
+Install the library
+*******************
+
+Build the entire project before performing the installation.
+
+4) Build the entire project
 
    .. code-block:: bash
 
-      cat build/src/cpp/tests/results.tex
+      $ pwd
+      /path/to/tardigrade_solver_tools
+      $ cmake -S . -B build
+      $ cmake --build build --target all
 
-4) Display docs
+5) Install the library
 
    .. code-block:: bash
 
-      # Sphinx
-      firefox build/docs/sphinx/html/index.html &
+      $ pwd
+      /path/to/tardigrade_solver_tools
+      $ cmake --install build --prefix path/to/root/install
 
-      # Doxygen
-      firefox build/docs/doxygen/html/index.html &
+      # Example local user (non-admin) Linux install
+      $ cmake --install build --prefix /home/$USER/.local
 
+      # Example install to an active conda environment
+      $ cmake --install build --prefix $CONDA_PREFIX
+
+***********************
+Build the Conda package
+***********************
+
+.. code-block:: bash
+
+   $ conda mambabuild recipe --no-anaconda-upload -c conda-forge --output-folder conda-bld
+
+*****************
 Local development
-=================
+*****************
 
 In some cases it is not convenient to pull down every repository required but it may be desired that local
 versions of the repository are used. An example of when this may be needed is if development is across
@@ -172,29 +129,49 @@ multiple libraries and is proceeding faster than collaborators can check in resu
 outside of developers no-one should need to do this, a version of the code using local repositories can be
 built.
 
-1) Activate a [W-13 Python Environment](https://xcp-confluence.lanl.gov/display/PYT/The+W-13+Python+3+environment)
+To perform in-source builds of upstream libraries, the active Conda environment can NOT include installed versions of
+the upstream libraries to be built in-source with the current project. It is possible to mix sources with some upstream
+libraries coming from the active Conda environment and others built in-source from a Git repository. Developers may
+build minimal working Conda environments from the Python Modules discussion.
+
+1) Build and activate a minimal Conda development environment
 
    .. code-block:: bash
 
-      $ module load python/2020.07-python-3.8
-      $ sv3r
+       $ conda env create --file configuration_files/environment.yaml
+       $ conda activate environment
 
 2) Define convenience environment variables
 
    .. code-block:: bash
 
-      $ my_tardigrade_error_tools=/path/to/my/tardigrade_error_tools
-      $ my_tardigrade_vector_tools=/path/to/my/tardigrade_vector_tools
+      $ tardigrade_error_tools=/path/to/my/tardigrade_error_tools
+      $ tardigrade_error_tools_version=origin/dev
+      $ tardigrade_vector_tools=/path/to/my/tardigrade_vector_tools
+      $ tardigrade_vector_tools_version=origin/dev
 
-3) Perform the initial configuration
+3) Perform the initial configuration. Note that the environment variables are mutually independent. Each variable can be
+   used alone or in arbitrary combinations. The default values are found in the root ``CMakeLists.txt`` file. The ``PATH``
+   variables can accept anything that the [``CMake``
+   ``FetchContent``](https://cmake.org/cmake/help/latest/module/FetchContent.html) ``GIT_REPOSITORY`` option can accept.
+   The ``GITTAG`` variables will accept anything that the [``CMake``
+   ``FetchContent``](https://cmake.org/cmake/help/latest/module/FetchContent.html) ``GIT_TAG`` option can accept.
 
    .. code-block:: bash
 
+      # View the defaults
+      $ grep _TOOLS_ CMakeLists.txt
+      set(TARDIGRADE_ERROR_TOOLS_PATH "" CACHE PATH "The path to the local version of tardigrade_error_tools")
+      set(TARDIGRADE_ERROR_TOOLS_GITTAG "" CACHE PATH "The path to the local version of tardigrade_error_tools")
+      set(TARDIGRADE_VECTOR_TOOLS_PATH "" CACHE PATH "The path to the local version of tardigrade_vector_tools")
+      set(TARDIGRADE_VECTOR_TOOLS_GITTAG "" CACHE PATH "The path to the local version of tardigrade_vector_tools")
+
+      $ Build against local directory paths and possible custom branch
       $ pwd
       /path/to/tardigrade_solver_tools
       $ mkdir build
       $ cd build
-      $ cmake3 .. -DFETCH_SOURCE=LOCAL -DTARDIGRADE_ERROR_TOOLS_PATH=${my_tardigrade_error_tools} -DTARDIGRADE_VECTOR_TOOLS_PATH=${my_tardigrade_vector_tools}
+      $ cmake .. -DTARDIGRADE_ERROR_TOOLS_PATH=${my_tardigrade_error_tools} -DTARDIGRADE_ERROR_TOOLS_GITTAG=${tardigrade_error_tools_version} -DTARDIGRADE_VECTOR_TOOLS_PATH=${my_tardigrade_vector_tools} -DTARDIGRADE_VECTOR_TOOLS_GITTAG=${tardigrade_vector_tools_version}
 
 4) Building the library
 
@@ -203,88 +180,6 @@ built.
       $ pwd
       /path/to/tardigrade_solver_tools/build
       $ make
-
-Building the documentation
-==========================
-
-To build just the documentation pick up the steps here:
-
-2) Create the build directory and move there
-
-   .. code-block:: bash
-
-      $ pwd
-      /path/to/tardigrade_solver_tools/
-      $ mkdir build/
-      $ cd build/
-
-3) Run cmake3 configuration
-
-   .. code-block:: bash
-
-      $ pwd
-      /path/to/tardigrade_solver_tools/build/
-      $ cmake3 ..
-
-4) Build the docs
-
-   .. code-block:: bash
-
-      $ cmake3 --build docs
-
-5) Documentation builds to:
-
-   .. code-block:: bash
-
-      tardigrade_solver_tools/build/docs/sphinx/html/index.html
-
-6) Display docs
-
-   .. code-block:: bash
-
-      $ pwd
-      /path/to/tardigrade_solver_tools/build/
-      $ firefox docs/sphinx/html/index.html &
-
-7) While the Sphinx API is still a WIP, try the doxygen API
-
-   .. code-block:: bash
-
-      $ pwd
-      /path/to/tardigrade_solver_tools/build/
-      $ firefox docs/doxygen/html/index.html &
-
-*******************
-Install the library
-*******************
-
-Build the entire before performing the installation.
-
-4) Build the entire project
-
-   .. code-block:: bash
-
-      $ pwd
-      /path/to/tardigrade_solver_tools/build
-      $ cmake3 --build .
-
-5) Install the library
-
-   .. code-block:: bash
-
-      $ pwd
-      /path/to/tardigrade_solver_tools/build
-      $ cmake --install . --prefix path/to/root/install
-
-      # Example local user (non-admin) Linux install
-      $ cmake --install . --prefix /home/$USER/.local
-
-      # Example install to conda environment
-      $ conda active my_env
-      $ cmake --install . --prefix ${CONDA_DEFAULT_ENV}
-
-      # Example install to W-13 CI/CD conda environment performed by CI/CD institutional account
-      $ cmake --install . --prefix /projects/aea_compute/release
 
 ***********************
 Contribution Guidelines
@@ -324,9 +219,9 @@ doubt use ``feature/<description>``.
 reStructured Text
 =================
 
-[Sphinx](https://www.sphinx-doc.org/en/master/) reads in docstrings and other special portions of the code as
-reStructured text. Developers should follow styles in this [Sphinx style
-guide](https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#).
+`Sphinx`_ reads in docstrings and other special portions of the code as
+reStructured text. Developers should follow styles in this `Sphinx style guide
+<https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#>`_.
 
 Style Guide
 ===========
@@ -360,7 +255,7 @@ full project from the source directory via
 
 .. code-block:
 
-   $ run-clang-tidy -config-file=.clang-tidy -header-filter=*.h -p build
+   $ run-clang-tidy -config-file=.clang-tidy -p build -extra-arg="-mno-sse2"
 
 The formatting can be checked using `clang-format`_ by running
 
