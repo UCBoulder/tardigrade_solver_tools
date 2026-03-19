@@ -6,12 +6,31 @@ Changelog
 #########
 
 ******************
-0.6.5 (unreleased)
+0.6.6 (2026-03-19)
+******************
+
+Internal Changes
+================
+- Removed python from the host environment (:pull:`11`). By `Nathan Miller`_.
+- Enabled setting the flag to turn off tardigrade_error_tools error handling (:pull:`12`). By `Nathan Miller`_.
+- Allow builds with Eigen3 >= 3.5 (:pull:`13`). By `Nathan Miller`_.
+
+Release
+=======
+- Released version (:pull:`14`). By `Nathan Miller`_.
+
+******************
+0.6.5 (2026-01-07)
 ******************
 
 Internal Changes
 ================
 - Updated the README (:pull:`8`). By `Nathan Miller`_.
+- Updated recipe meta to reflect the rest of the stack (:pull:`9`). By `Nathan Miller`_.
+
+Release
+=======
+- Released version (:pull:`10`). By `Nathan Miller`_.
 
 ******************
 0.6.4 (2023-12-23)
