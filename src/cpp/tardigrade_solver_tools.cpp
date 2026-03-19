@@ -986,10 +986,10 @@ namespace tardigradeSolverTools {
         floatVector originalResidual;
         floatMatrix originalJacobian;
         floatMatrix originalFloatOuts = floatOuts;
-        errorOut    error             = computeOriginalResidual(x, floatArgsOriginalResidual, intArgsOriginalResidual,
-                                                                originalResidual, originalJacobian, originalFloatOuts, intOuts);
-        residual                      = originalResidual;
-        jacobian                      = originalJacobian;
+        errorOut    error = computeOriginalResidual(x, floatArgsOriginalResidual, intArgsOriginalResidual,
+                                                    originalResidual, originalJacobian, originalFloatOuts, intOuts);
+        residual          = originalResidual;
+        jacobian          = originalJacobian;
 
         if (error) {
             errorOut result = new errorNode("computeBarrierHomotopyResidual",
